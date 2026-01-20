@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import {useState, useRef, useEffect} from "react";
 import video1 from "../assets/videos/2026COLLECTION.mp4";
 import video2 from "../assets/videos/FALLCOLLECTION.mp4";
 import video3 from "../assets/videos/MAIN_PC.avif";
@@ -8,9 +8,11 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { twMerge } from "tailwind-merge";
-import { Pagination, Navigation } from "swiper/modules";
+import {Swiper, SwiperSlide} from 'swiper/react';
+import {twMerge} from "tailwind-merge";
+import {Pagination, Navigation} from "swiper/modules";
+import {Link} from "react-router-dom";
+import LookBookSlider from "./components/LookBookSlider.tsx";
 
 const SLIDES = [
     {
@@ -122,94 +124,116 @@ function Home() {
 
     useEffect(() => {
         if (swiperInstance) updateMediaControl(swiperInstance);
-        return () => { if (timerRef.current) cancelAnimationFrame(timerRef.current); };
+        return () => {
+            if (timerRef.current) cancelAnimationFrame(timerRef.current);
+        };
     }, [swiperInstance]);
 
     return (
-        <section className={twMerge("w-full", "h-[770px] relative overflow-hidden bg-black")}>
-            <Swiper
-                onSwiper={setSwiperInstance}
-                loop={true}
-                speed={250}
-                autoplay={false}
-                navigation={true}
-                modules={[Pagination, Navigation]}
-                onSlideChangeTransitionEnd={updateMediaControl}
-                className={twMerge("w-full h-full relative cursor-e-resize", [
-                    "[&_.swiper-button-next]:after:!content-none",
-                    "[&_.swiper-button-prev]:after:!content-none",
-                    "[&_.swiper-button-next]:!opacity-0",
-                    "[&_.swiper-button-prev]:!opacity-0",
-                    "[&_.swiper-button-next]:!w-1/4",
-                    "[&_.swiper-button-next]:!h-full",
-                    "[&_.swiper-button-next]:!right-0",
-                    "[&_.swiper-button-next]:!top-0",
-                    "[&_.swiper-button-next]:!m-0",
-                    "[&_.swiper-button-next]:!cursor-e-resize",
-                    "[&_.swiper-button-prev]:!w-1/4",
-                    "[&_.swiper-button-prev]:!h-full",
-                    "[&_.swiper-button-prev]:!left-0",
-                    "[&_.swiper-button-prev]:!top-0",
-                    "[&_.swiper-button-prev]:!m-0",
-                    "[&_.swiper-button-prev]:!cursor-e-resize",
-                ])}
-            >
-                {SLIDES.map((slide) => (
-                    <SwiperSlide key={slide.id}>
-                        <div className="relative w-full h-full">
-                            {slide.type === "video" ? (
-                                <video src={slide.src} muted playsInline className="w-full h-full object-cover" />
-                            ) : (
-                                <img src={slide.src} className="w-full h-full object-cover" alt={slide.title} />
-                            )}
+        <>
+            <section className={twMerge("w-full", "h-[770px] relative overflow-hidden bg-black")}>
+                <Swiper
+                    onSwiper={setSwiperInstance}
+                    loop={true}
+                    speed={250}
+                    autoplay={false}
+                    navigation={true}
+                    modules={[Pagination, Navigation]}
+                    onSlideChangeTransitionEnd={updateMediaControl}
+                    className={twMerge("w-full h-full relative cursor-e-resize", [
+                        "[&_.swiper-button-next]:after:!content-none",
+                        "[&_.swiper-button-prev]:after:!content-none",
+                        "[&_.swiper-button-next]:!opacity-0",
+                        "[&_.swiper-button-prev]:!opacity-0",
+                        "[&_.swiper-button-next]:!w-1/4",
+                        "[&_.swiper-button-next]:!h-full",
+                        "[&_.swiper-button-next]:!right-0",
+                        "[&_.swiper-button-next]:!top-0",
+                        "[&_.swiper-button-next]:!m-0",
+                        "[&_.swiper-button-next]:!cursor-e-resize",
+                        "[&_.swiper-button-prev]:!w-1/4",
+                        "[&_.swiper-button-prev]:!h-full",
+                        "[&_.swiper-button-prev]:!left-0",
+                        "[&_.swiper-button-prev]:!top-0",
+                        "[&_.swiper-button-prev]:!m-0",
+                        "[&_.swiper-button-prev]:!cursor-e-resize",
+                    ])}
+                >
+                    {SLIDES.map((slide) => (
+                        <SwiperSlide key={slide.id}>
+                            <div className="relative w-full h-full">
+                                {slide.type === "video" ? (
+                                    <video src={slide.src} muted playsInline className="w-full h-full object-cover"/>
+                                ) : (
+                                    <img src={slide.src} className="w-full h-full object-cover" alt={slide.title}/>
+                                )}
 
-                            {/* 텍스트 및 버튼 컨테이너 */}
-                            <div className="absolute inset-0 flex flex-col items-center justify-center top-113 pointer-events-none">
-                                <h2 className="text-white text-[24px] font-bold uppercase tracking-[0.1em] mb-6">
-                                    {slide.title}
-                                </h2>
+                                {/* 텍스트 및 버튼 컨테이너 */}
+                                <div
+                                    className="absolute inset-0 flex flex-col items-center justify-center top-113 pointer-events-none">
+                                    <h2 className="text-white text-[24px] font-bold uppercase tracking-[0.1em] mb-6">
+                                        {slide.title}
+                                    </h2>
 
-                                <div className="flex gap-2 z-50 pointer-events-auto">
-                                    <a
-                                        href={slide.buyLink}
-                                        onClick={(e) => e.stopPropagation()}
-                                        className="px-[23px] py-2 border border-white text-white text-[11px] font-medium rounded-full hover:bg-white hover:text-black transition-all duration-300 text-center"
-                                    >
-                                        구매하기
-                                    </a>
-                                    <a
-                                        href={slide.campaignLink}
-                                        onClick={(e) => e.stopPropagation()}
-                                        className="px-[20px] py-2 border border-white text-white text-[11px] font-medium rounded-full hover:bg-white hover:text-black transition-all duration-300 text-center"
-                                    >
-                                        캠페인 보기
-                                    </a>
+                                    <div className="flex gap-2 z-50 pointer-events-auto">
+                                        <a
+                                            href={slide.buyLink}
+                                            onClick={(e) => e.stopPropagation()}
+                                            className="px-[23px] py-2 border border-white text-white text-[11px] font-medium rounded-full hover:bg-white hover:text-black transition-all duration-300 text-center"
+                                        >
+                                            구매하기
+                                        </a>
+                                        <a
+                                            href={slide.campaignLink}
+                                            onClick={(e) => e.stopPropagation()}
+                                            className="px-[20px] py-2 border border-white text-white text-[11px] font-medium rounded-full hover:bg-white hover:text-black transition-all duration-300 text-center"
+                                        >
+                                            캠페인 보기
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </SwiperSlide>
-                ))}
-
-                {/* --- 누적형 슬림 페이지네이션 바 --- */}
-                <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex gap-[7px]">
-                    {SLIDES.map((_, index) => (
-                        <button
-                            key={index}
-                            onClick={() => swiperInstance?.slideToLoop(index)}
-                            className="w-25 h-6 flex items-center group focus:outline-none cursor-e-resize"
-                        >
-                            <div className="w-full h-[1px] bg-white/20 relative overflow-hidden pointer-events-none">
-                                <div
-                                    ref={(el) => (progressRef.current[index] = el!)}
-                                    className="absolute top-0 left-0 w-full h-full bg-white origin-left transition-transform duration-100 ease-linear"
-                                    style={{transform: 'scaleX(0)'}}
-                                />
-                            </div>
-                        </button>
+                        </SwiperSlide>
                     ))}
+
+                    {/* --- 누적형 슬림 페이지네이션 바 --- */}
+                    <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex gap-[7px]">
+                        {SLIDES.map((_, index) => (
+                            <button
+                                key={index}
+                                onClick={() => swiperInstance?.slideToLoop(index)}
+                                className="w-25 h-6 flex items-center group focus:outline-none cursor-e-resize"
+                            >
+                                <div
+                                    className="w-full h-[1px] bg-white/20 relative overflow-hidden pointer-events-none">
+                                    <div
+                                        ref={(el) => (progressRef.current[index] = el!)}
+                                        className="absolute top-0 left-0 w-full h-full bg-white origin-left transition-transform duration-100 ease-linear"
+                                        style={{transform: 'scaleX(0)'}}
+                                    />
+                                </div>
+                            </button>
+                        ))}
+                    </div>
+                </Swiper>
+            </section>
+            <div className={twMerge("bg-[#f2f3f5]", "overflow-hidden")}>
+                <div className={twMerge("pt-[50px]", "px-[50px]", "w-full", "pb-2")}>
+                    <p className={twMerge("text-[#111]", "text-[17px]","font-[550]")}>새롭게 선보이는 젠틀몬스터 신제품</p>
+                    <Link
+                        to="/"
+                        className={twMerge("text-[12px]","underline","decoration-1")}
+                    >
+                        더보기
+                    </Link>
                 </div>
-            </Swiper>
-        </section>
+
+                {/* 슬라이더 영역: 텍스트 바로 아래 붙도록 설정 */}
+                <div className="mt-[-5px]">
+                    <LookBookSlider/>
+                </div>
+            </div>
+        </>
     );
 }
 

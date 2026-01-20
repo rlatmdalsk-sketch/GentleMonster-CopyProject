@@ -1,6 +1,9 @@
 import { twMerge } from "tailwind-merge";
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import {IoIosSearch} from "react-icons/io";
+import {RiShoppingBagLine} from "react-icons/ri";
+import {LuUser} from "react-icons/lu";
 
 const MENU = [
     {
@@ -56,9 +59,9 @@ const MENU = [
 
 const RIGHT_MENU = [
     { name: '슬라이드', path: '/slide' },
-    { name: '돋보기', path: '/search' },
-    { name: '로그인', path: '/login' },
-    { name: '장바구니', path: '/cart' },
+    { name: '검색', path: '/search', icon: <IoIosSearch  size={24}/> },
+    { name: '로그인', path: '/login', icon:<LuUser  size={24}/> },
+    { name: '쇼핑백', path: '/cart', icon: <RiShoppingBagLine size={24} /> },
 ];
 
 export default function Header() {
@@ -100,7 +103,7 @@ export default function Header() {
                 className={twMerge(
                     "fixed top-0 left-0 right-0 z-50 transition-all",
                     isVideoPassed
-                        ? "bg-[#f2f3f5]/30 backdrop-blur-xl text-black shadow-sm"
+                        ? "bg-[#f2f3f5]/30 backdrop-blur-xl text-black "
                         : (hoveredMenu ? "text-white" : "bg-transparent text-white"),
                     !isHome && "relative"
                 )}
@@ -125,10 +128,15 @@ export default function Header() {
                         <Link to="/">GENTLE MONSTER</Link>
                     </div>
 
-                    <div className="flex gap-3 justify-end text-[14px] font-bold">
-                        <div className="cursor-pointer">{RIGHT_MENU[0].name}|{RIGHT_MENU[1].name}</div>
-                        <Link to={RIGHT_MENU[2].path}>{RIGHT_MENU[2].name}</Link>
-                        <Link to={RIGHT_MENU[3].path}>{RIGHT_MENU[3].name}</Link>
+                    {/* RIGHT: 아이콘 메뉴 */}
+                    <div className="flex gap-3 justify-end items-center">
+                        <div className={twMerge("flex","items-center")}>
+                            <Link to="/slide" className="text-[13px] font-bold">슬라이드</Link> {/*이 부분 수정*/}
+                            <span className="text-[10px] opacity-30">|</span>
+                            <Link to="/search" className="p-1"><IoIosSearch  size={24} /></Link>
+                        </div>
+                        <Link to="/login" className="p-1"><LuUser size={24} /></Link>
+                        <Link to="/cart" className="p-1"><RiShoppingBagLine size={24} /></Link>
                     </div>
                 </div>
 
