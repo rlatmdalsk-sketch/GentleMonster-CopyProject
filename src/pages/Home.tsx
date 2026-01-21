@@ -130,8 +130,8 @@ function Home() {
     }, [swiperInstance]);
 
     return (
-        <>
-            <section className={twMerge("w-full", "h-[770px] relative overflow-hidden bg-black")}>
+        <div className={twMerge("bg-[#f2f3f5]")}>
+            <section className={twMerge("w-full", "h-[855px] relative overflow-hidden bg-black")}>
                 <Swiper
                     onSwiper={setSwiperInstance}
                     loop={true}
@@ -170,7 +170,7 @@ function Home() {
 
                                 {/* 텍스트 및 버튼 컨테이너 */}
                                 <div
-                                    className="absolute inset-0 flex flex-col items-center justify-center top-113 pointer-events-none">
+                                    className="absolute inset-0 flex flex-col items-center justify-center top-120 pointer-events-none">
                                     <h2 className="text-white text-[24px] font-bold uppercase tracking-[0.1em] mb-6">
                                         {slide.title}
                                     </h2>
@@ -217,8 +217,9 @@ function Home() {
                     </div>
                 </Swiper>
             </section>
-            <div className={twMerge("bg-[#f2f3f5]", "overflow-hidden")}>
-                <div className={twMerge("pt-[50px]", "px-[50px]", "w-full", "pb-2")}>
+            {/*신제품 슬라이드*/}
+            <div>
+                <div className={twMerge("pt-[55px]", "px-[50px]", "w-full", "pb-10")}>
                     <p className={twMerge("text-[#111]", "text-[17px]","font-[550]")}>새롭게 선보이는 젠틀몬스터 신제품</p>
                     <Link
                         to="/"
@@ -229,11 +230,27 @@ function Home() {
                 </div>
 
                 {/* 슬라이더 영역: 텍스트 바로 아래 붙도록 설정 */}
-                <div className="mt-[-5px]">
+                <div className="mt-20">
                     <LookBookSlider/>
                 </div>
             </div>
-        </>
+
+            {/*TOP 베스트셀러 슬라이드*/}
+            <div>
+                <div className={twMerge("pt-[55px]", "px-[50px]", "w-full", "pb-10")}>
+                    <p className={twMerge("text-[#111]", "text-[17px]","font-[550]")}>TOP 20 베스트셀러</p>
+                    <Link
+                        to="/"
+                        className={twMerge("text-[12px]","underline","decoration-1")}
+                    >
+                        더보기
+                    </Link>
+                </div>
+                <div className="mt-20">
+                    <LookBookSlider/>
+                </div>
+            </div>
+        </div>
     );
 }
 
