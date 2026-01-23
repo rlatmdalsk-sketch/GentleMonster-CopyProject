@@ -6,7 +6,6 @@ interface AuthState {
     isLoggedIn: boolean;
     token: string | null;
     user: User | null;
-    // 순서 조정: (user, token) 순서가 가독성 및 일반적인 관례에 더 가깝습니다.
     login: (user: User, token: string) => void;
     logout: () => void;
 }
