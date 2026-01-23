@@ -17,3 +17,14 @@ export interface User {
     gender: "MALE" | "FEMALE";
     birthdate: string;
 }
+
+export interface LoginFormType {
+    email: string;
+    password: string;
+}
+
+export interface LoginResponse {
+    message: string;
+    token: string;
+    user: User;
+}

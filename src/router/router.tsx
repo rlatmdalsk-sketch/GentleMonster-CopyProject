@@ -10,6 +10,7 @@ import PocketSunglasses from "../pages/Category/sunglasses/pocket-collection.tsx
 import BestSunglasses from "../pages/Category/sunglasses/bestsellers.tsx";
 import TintedSunglasses from "../pages/Category/sunglasses/tinted-lenses.tsx";
 import Stories from "../pages/Category/stories/stories.tsx";
+import MyAccount from "../pages/auth/myaccount.tsx";
 
 
 
@@ -20,9 +21,9 @@ const router = createBrowserRouter([
         children: [
             {index: true, element: <Home />}, /*메인홈*/
             { path: "/register", element: <Register />},
+            { path: "/myaccount", element: <MyAccount />},
 
             /* 선글라스 카테고리 */
-            { path: "category/sunglasses/view-all", element: <ViewAllSunglasses /> },
             { path: "category/sunglasses/2026-collection", element: <C2026Sunglasses /> },
             { path: "category/sunglasses/2025-fall-collection", element: <CF2025Sunglasses /> },
             { path: "category/sunglasses/2025-bold-collection", element: <CB2025Sunglasses /> },

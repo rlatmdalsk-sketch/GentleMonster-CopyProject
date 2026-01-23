@@ -1,27 +1,34 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type {User} from "../types/uesr.ts";
+import type { User } from "../types/uesr.ts";
 
 interface AuthState {
     isLoggedIn: boolean;
     token: string | null;
     user: User | null;
-    //login 함수는 token과 user를 받아서 값을 저장(변경)하고 아무것도 뱉어주지 않음
-    login: (token: string, user: User) => void;
-    //logout 함수는 아무것도 받지 않지만 token을 null, user를 null로 바꾸고 아무것도 뱉어주지 않음
+    // 순서 조정: (user, token) 순서가 가독성 및 일반적인 관례에 더 가깝습니다.
+    login: (user: User, token: string) => void;
     logout: () => void;
 }
 
 const useAuthStore = create<AuthState>()(
     persist(
-        set => ({
+        (set) => ({
             isLoggedIn: false,
             token: null,
             user: null,
-            login: (token: string, user: User) => set({ isLoggedIn: true, token, user }),
-            logout: () => set({ isLoggedIn: false, token: null, user: null }),
+            // 매개변수 순서를 (user, token)으로 변경
+            login: (user, token) => set({ isLoggedIn: true, user, token }),
+            logout: () => {
+                // 로그아웃 시 로컬 스토리지를 명확히 비우거나 상태를 초기화
+                set({ isLoggedIn: false, token: null, user: null });
+            },
         }),
-        { name: "auth-storage" },
+        {
+            name: "auth-storage",
+            // (선택 사항) 세션 스토리지로 바꾸고 싶다면 아래 주석 해제
+            // storage: createJSONStorage(() => sessionStorage),
+        },
     ),
 );
 

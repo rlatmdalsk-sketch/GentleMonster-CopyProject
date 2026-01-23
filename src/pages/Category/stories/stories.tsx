@@ -63,7 +63,7 @@ const STORIES = [
 
 export default function Stories() {
     return (
-        <div className="pt-[90px]  w-full">
+        <div className="  w-full">
             {/* 개별 캠페인 섹션 */}
             {STORIES.map((story) => (
                 <Link to={""}>
