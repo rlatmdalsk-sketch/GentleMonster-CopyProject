@@ -132,7 +132,7 @@ function Home() {
 
     return (
         <div className={twMerge("bg-[#f2f3f5]")}>
-            <section className={twMerge("w-full", "h-[855px] relative overflow-hidden bg-black")}>
+            <section className={twMerge("w-full", "h-[770px] relative overflow-hidden bg-black")}>
                 <Swiper
                     onSwiper={setSwiperInstance}
                     loop={true}

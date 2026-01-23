@@ -29,12 +29,7 @@ function LookBookSlider() {
                     centeredSlides={false}
                     spaceBetween={10}
                     grabCursor={true}
-                    freeMode={{
-                        enabled: true,
-                        sticky: true,
-                        momentum: false,
-                    }}
-                    speed={100}
+                    speed={800}
                     touchRatio={1.2}
                     className="w-full h-[700px]" // 슬라이더 자체 높이를 이미지 박스와 일치시킴
                 >

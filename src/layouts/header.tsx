@@ -99,20 +99,21 @@ export default function Header({ onLoginClick }: { onLoginClick: () => void }) {
 
     return (
         <div className="relative w-full">
-            <header
+            {/* 블러 컨테이너 - 헤더와 서브메뉴를 함께 감싸서 동일한 블러 적용 */}
+            <div
                 onMouseLeave={() => setHoveredMenu(null)}
                 className={twMerge(
                     "left-0 right-0 z-50 transition-all duration-300",
                     isHome ? "fixed" : "absolute",
-
-                    // 🌟 헤더 배경 로직 수정
+                    // 블러는 여기서만 적용
                     !isHome
-                        ? "bg-[#f2f3f5] text-black" // 다른 페이지: 고정 배경
+                        ? "bg-[#f2f3f5] text-black"
                         : (isScrolled
-                            ? "bg-[#f2f3f5]/60 backdrop-blur-xl text-black" // 홈 스크롤 후: 반투명 + 블러
-                            : "bg-transparent text-white") // 홈 스크롤 전: 완전 투명
+                            ? "bg-[#f2f3f5]/60 backdrop-blur-xl text-black"
+                            : "bg-transparent text-white")
                 )}
             >
+                {/* 헤더 메인 */}
                 <div className="grid grid-cols-3 items-center h-[90px] px-[60px] mobile:h-[56px] mobile:px-[12px]">
                     <nav className="flex gap-5 font-bold h-full items-center">
                         {MENU.map(menu => (
@@ -159,25 +160,14 @@ export default function Header({ onLoginClick }: { onLoginClick: () => void }) {
                     </div>
                 </div>
 
+                {/* 서브메뉴 - 블러 컨테이너 안에 포함 */}
                 <div
                     className={twMerge(
-                        "absolute top-[90px] left-0 right-0 overflow-hidden transition-all duration-500 ease-in-out",
+                        "overflow-hidden transition-all duration-500 ease-in-out",
                         hoveredMenu ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0 pointer-events-none"
                     )}
                 >
-                    <div
-                        className={twMerge(
-                            "py-2 px-[10px]",
-                            // 1. 다른 페이지(!isHome) -> 고정 배경 (#f2f3f5)
-                            // 2. 홈 스크롤 전 (!isScrolled) -> 배경색 X, 블러 X (완전 투명)
-                            // 3. 홈 스크롤 후 (isScrolled) -> 반투명 배경 + 강한 블러 (backdrop-blur-xl)
-                            !isHome
-                                ? "bg-[#f2f3f5]"
-                                : (isScrolled
-                                    ? "bg-[#f2f3f5]/60 backdrop-blur-xs text-black"
-                                    : "bg-transparent")
-                        )}
-                    >
+                    <div className="py-2 px-[10px]">
                         {MENU.map(menu => (
                             <div
                                 key={menu.name}
@@ -192,8 +182,8 @@ export default function Header({ onLoginClick }: { onLoginClick: () => void }) {
                                         key={subItem.name}
                                         to={subItem.path}
                                         className={twMerge(
-                                            "text-[13px] font-bold transition-colors whitespace-nowrap w-fit",
-                                            isVideoPassed ? "text-black ": "text-white"
+                                            "text-[13px] font-bold transition-colors whitespace-nowrap w-fit hover:opacity-70",
+                                            isVideoPassed ? "text-black" : "text-white"
                                         )}
                                     >
                                         {subItem.name}
@@ -203,7 +193,7 @@ export default function Header({ onLoginClick }: { onLoginClick: () => void }) {
                         ))}
                     </div>
                 </div>
-            </header>
+            </div>
 
             {!isHome && <div className="h-[90px] mobile:h-[56px] w-full" />}
         </div>
