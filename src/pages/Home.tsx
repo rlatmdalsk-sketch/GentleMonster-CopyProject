@@ -136,9 +136,17 @@ function Home() {
                 <Swiper
                     onSwiper={setSwiperInstance}
                     loop={true}
-                    speed={250}
+                    speed={400}
                     autoplay={false}
                     navigation={true}
+                    threshold={10}
+                    touchRatio={1.5}
+                    resistance={false}
+                    followFinger={true}
+                    shortSwipes={true}
+                    longSwipes={true}
+                    longSwipesRatio={0.2}
+                    touchMoveStopPropagation={true}
                     modules={[Pagination, Navigation]}
                     onSlideChangeTransitionEnd={updateMediaControl}
                     className={twMerge("w-full h-full relative cursor-e-resize", [
@@ -166,13 +174,14 @@ function Home() {
                                 {slide.type === "video" ? (
                                     <video src={slide.src} muted playsInline className="w-full h-full object-cover"/>
                                 ) : (
-                                    <img src={slide.src} className="w-full h-full object-cover" alt={slide.title}/>
+                                    <img src={slide.src} className="w-full h-full object-cover select-none "
+                                         alt={slide.title}/>
                                 )}
 
                                 {/* 텍스트 및 버튼 컨테이너 */}
                                 <div
                                     className="absolute inset-0 flex flex-col items-center justify-center top-120 pointer-events-none">
-                                    <h2 className="text-white text-[24px] font-bold uppercase tracking-[0.1em] mb-6">
+                                    <h2 className="text-white text-[24px] font-bold uppercase select-none tracking-[0.1em] mb-6">
                                         {slide.title}
                                     </h2>
 
@@ -180,14 +189,14 @@ function Home() {
                                         <a
                                             href={slide.buyLink}
                                             onClick={(e) => e.stopPropagation()}
-                                            className="px-[23px] py-2 border border-white text-white text-[11px] font-medium rounded-full hover:bg-white hover:text-black transition-all duration-300 text-center"
+                                            className="px-[23px] select-none  py-2 border border-white text-white text-[11px] font-medium rounded-full hover:bg-white  select-nonehover:text-black transition-all duration-300 text-center"
                                         >
                                             구매하기
                                         </a>
                                         <a
                                             href={slide.campaignLink}
                                             onClick={(e) => e.stopPropagation()}
-                                            className="px-[20px] py-2 border border-white text-white text-[11px] font-medium rounded-full hover:bg-white hover:text-black transition-all duration-300 text-center"
+                                            className="px-[20px] py-2 border  select-none border-white text-white text-[11px] font-medium rounded-full hover:bg-white select-nonehover:text-black transition-all duration-300 text-center"
                                         >
                                             캠페인 보기
                                         </a>
@@ -221,10 +230,10 @@ function Home() {
             {/*신제품 슬라이드*/}
             <div>
                 <div className={twMerge("pt-[55px]", "px-[50px]", "w-full", "pb-10")}>
-                    <p className={twMerge("text-[#111]", "text-[17px]","font-[550]")}>새롭게 선보이는 젠틀몬스터 신제품</p>
+                    <p className={twMerge("text-[#111]", "text-[17px]", "font-[550]")}>새롭게 선보이는 젠틀몬스터 신제품</p>
                     <Link
                         to="/category/sunglasses/view-all"
-                        className={twMerge("text-[12px]","underline","decoration-1")}
+                        className={twMerge("text-[12px]", "underline", "decoration-1")}
                     >
                         더보기
                     </Link>
@@ -239,10 +248,10 @@ function Home() {
             {/*TOP 베스트셀러 슬라이드*/}
             <div>
                 <div className={twMerge("pt-[55px]", "px-[50px]", "w-full", "pb-10")}>
-                    <p className={twMerge("text-[#111]", "text-[17px]","font-[550]")}>TOP 20 베스트셀러</p>
+                    <p className={twMerge("text-[#111]", "text-[17px]", "font-[550]")}>TOP 20 베스트셀러</p>
                     <Link
                         to="/category/sunglasses/bestsellers"
-                        className={twMerge("text-[12px]","underline","decoration-1")}
+                        className={twMerge("text-[12px]", "underline", "decoration-1")}
                     >
                         더보기
                     </Link>
