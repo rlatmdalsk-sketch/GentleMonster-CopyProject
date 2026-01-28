@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import AdminSlideBar from "./AdminSlideBar";
+import AdminSideBar from "../../layouts/AdminSideBar.tsx";
 import { createProduct } from "../../api/product.api";
 import { useNavigate } from "react-router-dom";
 
@@ -130,7 +130,7 @@ export default function ProductEdit() {
 
     return (
         <div className="min-h-screen bg-[#F2F2F2] flex text-black">
-            <AdminSlideBar />
+            <AdminSideBar />
             <main className="flex-1 p-12 space-y-10">
                 <h1 className="text-xl font-bold uppercase tracking-widest border-b border-black pb-4">New Product / Collection</h1>
 

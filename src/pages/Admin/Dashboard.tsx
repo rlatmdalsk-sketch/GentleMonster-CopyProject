@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import AdminSlideBar from "./AdminSlideBar";
 import useAuthStore from "../../stores/useAuthStore";
 import type { UserData } from "../../types/admin";
-import {fetchAllUsers} from "../../api/admin.api.ts"; // 수정된 인터페이스 경로
+import {fetchAllUsers} from "../../api/admin.api.ts";
 
 export default function Dashboard() {
     const navigate = useNavigate();
@@ -51,9 +50,6 @@ export default function Dashboard() {
     );
 
     return (
-        <div className="min-h-screen bg-[#F2F2F2] flex font-sans text-black">
-            <AdminSlideBar />
-
             <main className="flex-1 p-12 space-y-12">
                 {/* 헤더: 로그인 유저(adminInfo) 연동 */}
                 <div className="flex justify-between items-end border-b border-black pb-4">
@@ -137,6 +133,5 @@ export default function Dashboard() {
                     </div>
                 </section>
             </main>
-        </div>
     );
 }

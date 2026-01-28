@@ -1,17 +1,16 @@
 import { MdDashboard, MdPeople, MdInventory, MdLogout, MdArrowForward } from "react-icons/md";
 import { Link, useLocation, useNavigate } from "react-router";
-import useAuthStore from "../../stores/useAuthStore.ts";
+import useAuthStore from "../stores/useAuthStore.ts";
 
-const AdminSlideBar = () => {
+const AdminSideBar = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const {user, logout} = useAuthStore();
+    const {logout} = useAuthStore();
 
-    // 로그아웃 로직 (전달해주신 방식 적용)
     const handleLogout = () => {
-        logout(); // 외부에서 정의된 로그아웃 함수 호출
-        navigate("/"); // 홈으로 이동
+        logout();
+        navigate("/");
     };
 
     const isActive = (path: string) => {
@@ -73,4 +72,4 @@ const AdminSlideBar = () => {
     );
 };
 
-export default AdminSlideBar;
+export default AdminSideBar;

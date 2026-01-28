@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import useAuthStore from "../../stores/useAuthStore.ts";
 import { twMerge } from "tailwind-merge";
 import Input from "../components/input.tsx";
-import type {UpdateProfileDto} from "../../types/uesr.ts";
+import type {UpdateProfileDto} from "../../types/user.ts";
 import {updateProfile} from "../../api/auth.api.ts";
 
 function ProfileEdit() {

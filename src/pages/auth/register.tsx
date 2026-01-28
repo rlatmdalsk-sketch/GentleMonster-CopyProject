@@ -1,15 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { AxiosError } from "axios";
-import type { RegisterFormType } from "../../types/uesr.ts";
+import type { RegisterFormType } from "../../types/user.ts";
 import { twMerge } from "tailwind-merge";
 import Input from "../components/input.tsx";
-import useAuthStore from "../../stores/useAuthStore.ts";
-import { registerUser, loginUser } from "../../api/auth.api.ts"; // 중복 임포트 정리
+import { registerUser, } from "../../api/auth.api.ts";
+import { AxiosError } from "axios";
 
 function Register() {
     const navigate = useNavigate();
-    const { login } = useAuthStore();
 
     const {
         register,
@@ -25,42 +23,17 @@ function Register() {
 
     const password = watch("password");
 
-    // 단 하나의 onSubmit 함수로 정리 (회원가입 -> 로그인 연속 처리)
     const onSubmit = async (data: RegisterFormType) => {
         setError("root", { message: "" });
         try {
-            console.log("1. 회원가입 시도...");
             await registerUser(data);
-
-            console.log("2. 로그인 시도...");
-            // 🌟 여기서 호출하는 loginUser는 이미 response.data를 반환합니다.
-            const result = await loginUser({
-                email: data.email,
-                password: data.password
-            });
-
-            // 🌟 콘솔에서 데이터가 어떻게 오는지 직접 확인 (디버깅용)
-            console.log("3. 로그인 응답 결과:", result);
-
-            // 🌟 핵심 수정: result.data.token이 아니라 result.token으로 접근
-            if (result && result.data && result.data.token) {
-                const user = result.data.user;
-                const token = result.data.token;
-
-                // Zustand 스토어에 저장
-                login(user, token);
-
-                console.log("4. 로그인 성공! 데이터 저장 완료");
-                alert("회원가입 및 로그인이 완료되었습니다!");
-                navigate("/");
-            } else {
-                console.error("여전히 구조가 다릅니다:", result);
-                alert("서버 응답 형식이 올바르지 않습니다.");
-            }
-        } catch (error: any) {
+            alert("회원가입이 완료되었습니다!");
+            navigate("/");
+        } catch (error) {
             console.error("오류 발생:", error);
-            const serverMessage = error.response?.data?.message || "처리에 실패했습니다.";
-            setError("root", { message: serverMessage });
+            let message = "처리에 실패했습니다.";
+            if (error instanceof AxiosError) message = error.response?.data.message;
+            setError("root", { message: message });
         }
     };
 

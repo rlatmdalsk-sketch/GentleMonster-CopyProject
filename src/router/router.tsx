@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter, redirect} from "react-router";
 import Layout from "../layouts/layout.tsx";
 import Home from "../pages/Home.tsx";
 import Register from "../pages/auth/register.tsx";
@@ -7,8 +7,27 @@ import MyAccount from "../pages/auth/myaccount.tsx";
 import ProfileEdit from "../pages/auth/profileEdit.tsx";
 import ProductListPage from "../pages/Category/ProductListPage.tsx";
 import Dashboard from "../pages/Admin/Dashboard.tsx";
-import UserManager from "../pages/Admin/UserManager.tsx";
 import ProductEdit from "../pages/Admin/ProductEdit.tsx";
+import useAuthStore from "../stores/useAuthStore.ts";
+import AdminLayout from "../layouts/AdminLayout.tsx";
+import AdminUserList from "../pages/Admin/users/AdminUserList.tsx";
+import AdminUserCreate from "../pages/Admin/users/AdminUserCreate.tsx";
+import AdminUserEdit from "../pages/Admin/users/AdminUserEdit.tsx";
+
+export const adminOnlyLoader = () => {
+    const { isLoggedIn, user } = useAuthStore.getState();
+    if (!isLoggedIn) {
+        alert("관리자 로그인이 필요합니다.");
+        return redirect("/login");
+    }
+
+    if (user?.role !== "ADMIN") {
+        alert("접근 권한이 없습니다.");
+        return redirect("/");
+    }
+
+    return null;
+};
 
 const router = createBrowserRouter([
     {
@@ -28,9 +47,15 @@ const router = createBrowserRouter([
     /* 관리용 */
     {
         path: "/admin",
+        loader: adminOnlyLoader,
+        element: <AdminLayout />,
         children: [
             { index: true, element: <Dashboard /> }, 
-            { path: "user", element: <UserManager /> },
+            { path: "user", children: [
+                    { index: true, element: <AdminUserList />},
+                    { path: "create", element: <AdminUserCreate />},
+                    { path: ":id", element: <AdminUserEdit />}
+                ]  },
             { path: "ProductEdit", element: <ProductEdit />}
         ]
     }
