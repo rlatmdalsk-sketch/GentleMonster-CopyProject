@@ -185,7 +185,7 @@ function Home() {
                                 {/* 텍스트 및 버튼 컨테이너 */}
                                 <div
                                     className="absolute inset-0 flex flex-col items-center justify-center top-120 pointer-events-none">
-                                    <h2 className="text-white text-[24px] font-bold uppercase select-none tracking-[0.1em] mb-6">
+                                    <h2 className="text-[24px] md:text-[26px] font-serif lining-nums leading-[1.2] tracking-[-0.02em] text-white mb-6">
                                         {slide.title}
                                     </h2>
 

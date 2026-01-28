@@ -8,7 +8,7 @@ function Footer() {
                 {/*왼*/}
                 <div>
                     <div
-                        className={twMerge(["flex", "gap-4"], ["text-[13px]", "text-[#111111]", "font-semibold"])}>
+                        className={twMerge(["flex", "gap-4"], ["text-[13px]", "text-[#111111]", "font-[500]"])}>
                         <Link to={"/customerCare"}>문의하기</Link>
                         <Link to={"/admin"}>어드민</Link>
                         <Link to={"/"}>YOUTUBE</Link>
@@ -17,7 +17,7 @@ function Footer() {
                         <Link to={"/"}>고객 서비스</Link>
                         <Link to={"/"}>국가: South Korea</Link>
                     </div>
-                    <p className={twMerge("text-[10px]", "text-[#858585]", "font-semibold", "mt-4")}>
+                    <p className={twMerge("text-[9px]", "text-[#858585]", "font-semibold", "mt-4")}>
                         주) 아이아이컴바인드 | 대표자명: 김한국 | 사업자번호: 119-86-38589 | 통신판매신고번호: 제 2014-서울마포-1050호(사업자 정보 확인↗) | 이메일
                         문의:
                         service.kr@gentlemonster.com | 개인정보보호책임자: 정태호 | 주소: 서울특별시 성동구 뚝섬로 433 | 대표번호:1600-2126 <br/>
@@ -25,7 +25,7 @@ function Footer() {
                     </p>
                 </div>
                 {/*오*/}
-                <div className={twMerge("pr-7","text-[14px]","font-bold")}>
+                <div className={twMerge("pr-7","text-[12px]","font-bold")}>
                     © 2026 GENTLE MONSTER
                 </div>
             </div>

@@ -19,6 +19,8 @@
     font-weight: 700;
 }
 
+
+
 /* 2. Tailwind v4 테마 설정 */
 @theme {
     --font-gentle: "GentleMonsterSans", "Noto Sans KR", sans-serif;
@@ -33,3 +35,4 @@ body {
     font-family: var(--font-gentle); /* 설정한 폰트 적용 */
     -webkit-font-smoothing: antialiased;
 }
+

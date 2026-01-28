@@ -22,12 +22,12 @@ const ProductListPage = () => {
                 "fixed top-22 left-0 z-40 "
             )}>
                 {/* 🌟 동적 제목 출력 */}
-                <h2 className={twMerge("text-[23px]", "font-[550]")}>
+                <h2 className={twMerge("text-[20px]", "font-[550]")}>
                     {currentCategory.title}
                 </h2>
 
                 {/* 🌟 동적 설명 출력 */}
-                <p className={twMerge("text-[13px]", "font-bold", "text-center", "max-w-[800px] px-5 whitespace-pre-line")}>
+                <p className={twMerge("text-[12px]", "font-[500]", "text-center", "max-w-[800px] px-5 whitespace-pre-line")}>
                     {currentCategory.description}
                 </p>
             </div>

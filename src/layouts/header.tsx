@@ -5,6 +5,9 @@ import { IoIosSearch } from "react-icons/io";
 import { RiShoppingBagLine } from "react-icons/ri";
 import { LuUser } from "react-icons/lu";
 import useAuthStore from "../stores/useAuthStore.ts";
+import {Logo} from "../pages/components/Logo.tsx";
+
+
 
 const MENU = [
     {
@@ -63,7 +66,11 @@ export default function Header({ onLoginClick }: { onLoginClick: () => void }) {
     const [isScrolled, setIsScrolled] = useState(false);
     const location = useLocation();
 
+
+
     const isHome = location.pathname === '/' || location.pathname === '/home';
+
+    const logoColorClass = (!isHome || isScrolled) ? "text-black" : "text-white";
 
     useEffect(() => {
         setHoveredMenu(null);
@@ -115,14 +122,14 @@ export default function Header({ onLoginClick }: { onLoginClick: () => void }) {
             >
                 {/* 헤더 메인 */}
                 <div className="grid grid-cols-3 items-center h-[90px] px-[60px] mobile:h-[56px] mobile:px-[12px]">
-                    <nav className="flex gap-5 font-bold h-full items-center">
+                    <nav className="flex gap-5 - h-full items-center">
                         {MENU.map(menu => (
                             <div
                                 key={menu.name}
                                 onMouseEnter={(e) => handleMenuHover(menu.name, e)}
                                 className="relative h-full flex items-center cursor-pointer"
                             >
-                                <Link to={menu.path} className="text-[14px] py-2">
+                                <Link to={menu.path} className="text-14-ko leading-[18px] text-[14px] font-[550]">
                                     {menu.name}
                                 </Link>
                             </div>
@@ -130,9 +137,16 @@ export default function Header({ onLoginClick }: { onLoginClick: () => void }) {
                     </nav>
 
 
-                    <div className="text-4xl text-center font-gentle font-bold tracking-logo">
-                        <Link to="/" onClick={handleLogoClick}>
-                            GENTLE MONSTER
+                    <div className="flex justify-center items-center">
+                        <Link
+                            to="/"
+                            onClick={handleLogoClick}
+                            className={twMerge(
+                                "w-[280px] md:w-[305px] transition-all duration-300 hover:opacity-70",
+                                logoColorClass // 동적으로 결정된 색상 클래스 적용
+                            )}
+                        >
+                            <Logo className="w-full h-auto" />
                         </Link>
                     </div>
 
