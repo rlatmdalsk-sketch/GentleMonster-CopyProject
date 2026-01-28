@@ -1,56 +1,45 @@
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import useAuthStore from "../../stores/useAuthStore.ts";
-import { httpClient } from "../../api/axios.ts"; // 기존 axios 설정 사용
 import { twMerge } from "tailwind-merge";
-import Input from "../components/input.tsx"; // 기존 Input 컴포넌트 재사용
-
-interface ProfileEditForm {
-    name: string;
-    phone: string;
-}
+import Input from "../components/input.tsx";
+import type {UpdateProfileDto} from "../../types/uesr.ts";
+import {updateProfile} from "../../api/auth.api.ts";
 
 function ProfileEdit() {
     const navigate = useNavigate();
-    const { user, login, token } = useAuthStore(); // login 함수를 사용해 스토어 갱신
+    const { user, login, token } = useAuthStore();
 
     const {
         register,
         handleSubmit,
         formState: { errors, isSubmitting },
-    } = useForm<ProfileEditForm>({
+    } = useForm<UpdateProfileDto>({
         defaultValues: {
             name: user?.name || "",
             phone: user?.phone || "",
         },
     });
 
-    const onSubmit = async (data: ProfileEditForm) => {
+    const onSubmit = async (data: UpdateProfileDto) => {
         try {
-            // 1. 서버에 프로필 수정 요청 (엔드포인트는 서버 명세에 맞게 수정하세요)
-            const response = await httpClient.patch("/auth/profile", data);
-
-            // 2. 서버 응답 데이터 확인 (아까 확인한 대로 result.data 구조 가정)
-            const updatedUser = response.data.data?.user || response.data.user;
+            const updatedUser = await updateProfile(data);
 
             if (updatedUser && token) {
-                // 3. Zustand 스토어 업데이트 (기존 토큰 유지하며 유저 정보만 갱신)
                 login(updatedUser, token);
                 alert("프로필이 성공적으로 수정되었습니다.");
-                navigate("/my-account"); // 마이페이지로 이동
+                navigate("/myaccount");
             }
         } catch (error: any) {
-            console.error("수정 실패:", error);
             alert(error.response?.data?.message || "수정 중 오류가 발생했습니다.");
         }
     };
 
     return (
         <div className="flex flex-col items-center min-h-screen py-20 px-4">
-            <h2 className="text-2xl font-bold mb-10">프로필 수정</h2>
+            <h2 className="text-2xl font-bold mb-10">프로필 편집</h2>
 
             <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-md flex flex-col gap-6">
-                {/* 이름 수정 */}
                 <div className="flex flex-col gap-2">
                     <label className="text-sm font-semibold text-gray-600 ml-1">이름</label>
                     <Input
@@ -61,7 +50,6 @@ function ProfileEdit() {
                     {errors.name && <span className="text-xs text-red-500">{errors.name.message}</span>}
                 </div>
 
-                {/* 휴대폰 수정 */}
                 <div className="flex flex-col gap-2">
                     <label className="text-sm font-semibold text-gray-600 ml-1">휴대폰 번호</label>
                     <Input
@@ -78,7 +66,6 @@ function ProfileEdit() {
                     {errors.phone && <span className="text-xs text-red-500">{errors.phone.message}</span>}
                 </div>
 
-                {/* 버튼 영역 */}
                 <div className="flex gap-3 mt-4">
                     <button
                         type="button"

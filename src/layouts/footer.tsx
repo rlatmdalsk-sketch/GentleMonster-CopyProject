@@ -10,6 +10,7 @@ function Footer() {
                     <div
                         className={twMerge(["flex", "gap-4"], ["text-[13px]", "text-[#111111]", "font-semibold"])}>
                         <Link to={"/customerCare"}>문의하기</Link>
+                        <Link to={"/admin"}>어드민</Link>
                         <Link to={"/"}>YOUTUBE</Link>
                         <Link to={"/"}>법적 고지</Link>
                         <Link to={"/"}>개인정보 처리방침</Link>

@@ -19,7 +19,7 @@ const ProductListPage = () => {
             {/* 상단 고정 영역 */}
             <div className={twMerge(
                 "flex flex-col items-center pt-25 pb-10 gap-5 w-full",
-                "fixed top-22 left-0 z-40 " // 배경색이 있어야 상품 리스트와 겹치지 않아요!
+                "fixed top-22 left-0 z-40 "
             )}>
                 {/* 🌟 동적 제목 출력 */}
                 <h2 className={twMerge("text-[23px]", "font-[550]")}>

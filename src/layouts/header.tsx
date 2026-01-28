@@ -129,7 +129,8 @@ export default function Header({ onLoginClick }: { onLoginClick: () => void }) {
                         ))}
                     </nav>
 
-                    <div className="text-4xl text-center font-bold tracking-tighter">
+
+                    <div className="text-4xl text-center font-gentle font-bold tracking-logo">
                         <Link to="/" onClick={handleLogoClick}>
                             GENTLE MONSTER
                         </Link>
