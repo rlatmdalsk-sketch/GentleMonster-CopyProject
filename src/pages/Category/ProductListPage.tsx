@@ -105,7 +105,7 @@ const ProductListPage = () => {
             {/* 상품 리스트 */}
             <div className={twMerge(
                 "px-10 pb-20",
-                "image" in currentCategory ? "pt-20" : "pt-10"
+                "image" in currentCategory ? "pt-0" : "pt-10"
             )}>
                 {loading ? (
                     <div className="text-center py-20 text-xs uppercase tracking-widest text-gray-400 animate-pulse">
