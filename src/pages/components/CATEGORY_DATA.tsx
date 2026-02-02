@@ -115,5 +115,10 @@ export const CATEGORY_DATA: Record<string, Record<string, CategoryContent>> = {
                 "젠틀몬스터와 제니가 함께 상상한 세번째 프로젝트 ‘젠틀살롱 (JENTLE SALON)’을 소개합니다. 아이코닉한 디자인의 참(Charm)으로 다채로운 연출이 가능한 아이웨어를 통해 상상을 뛰어넘은 협업 컬렉션을 선보입니다.",
             image: "/images/stories/jennie.jpg",
         },
+        "bestseller":{
+            title: "베스트 셀러",
+            description:"시간이 흘러도 변치 않는 가치를 지닌 젠틀몬스터의 아이코닉한 베스트셀러 컬렉션을 만나보세요. 대중에게 가장 사랑받는 실루엣에 브랜드 고유의 실험적인 디테일을 더해 완성된 독보적인 라인업을 제안합니다.",
+            image: "/images/stories/best.jpg"
+        }
     },
 };

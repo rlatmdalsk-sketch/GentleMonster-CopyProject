@@ -1,18 +1,18 @@
+// AdminProductEdit.tsx 수정 - categoryIds로 변경하고 안전성 강화
+
 import { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { MdArrowBack, MdCloudUpload, MdClose, MdArrowForward } from "react-icons/md";
-import { fetchProductDetail } from "../../../api/product.api"; // 공용 API (상세 조회)
-import { updateProduct } from "../../../api/admin.product.api"; // 관리자 API (수정)
+import { fetchProductDetail } from "../../../api/product.api";
+import { updateProduct } from "../../../api/admin.product.api";
 import { uploadImage } from "../../../api/upload.api";
 import type { Category } from "../../../types/category";
-import type { CreateProductInput } from "../../../types/admin.product";
-import {getCategories} from "../../../api/category.api.ts"; // 타입 재사용
+import { getCategories } from "../../../api/category.api.ts";
 
 interface FlatCategory extends Category {
     level: number;
 }
 
-// 이미지 관리용 통합 타입 (기존 URL vs 새 파일)
 type ImageItem =
     | { type: "EXISTING"; url: string }
     | { type: "NEW"; file: File; previewUrl: string };
@@ -21,17 +21,14 @@ const AdminProductEdit = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
 
-    // UI States
     const [isLoading, setIsLoading] = useState(false);
     const [isFetching, setIsFetching] = useState(true);
     const [categories, setCategories] = useState<FlatCategory[]>([]);
 
-    // Image State (통합 리스트)
     const [imageList, setImageList] = useState<ImageItem[]>([]);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    // Form Data State
-    const [formData, setFormData] = useState<Omit<CreateProductInput, "imageUrls">>({
+    const [formData, setFormData] = useState({
         name: "",
         price: 0,
         material: "",
@@ -41,17 +38,15 @@ const AdminProductEdit = () => {
         originCountry: "",
         Shape: "",
         sizeInfo: "",
-        categoryId: 0,
+        categoryId: 0, // Edit는 단일 카테고리만
     });
 
-    // 1. 초기 데이터 로딩 (카테고리 + 상품 상세)
     useEffect(() => {
         const loadData = async () => {
             if (!id) return;
             try {
                 setIsFetching(true);
 
-                // A. 카테고리 로딩 & 평탄화
                 const categoryData = await getCategories();
                 const flattened: FlatCategory[] = [];
                 const flatten = (list: Category[], level = 0) => {
@@ -63,10 +58,8 @@ const AdminProductEdit = () => {
                 flatten(categoryData);
                 setCategories(flattened);
 
-                // B. 상품 상세 정보 로딩
                 const { product } = await fetchProductDetail(Number(id));
 
-                // 폼 데이터 채우기
                 setFormData({
                     name: product.name,
                     price: product.price,
@@ -77,11 +70,10 @@ const AdminProductEdit = () => {
                     originCountry: product.originCountry,
                     Shape: product.Shape,
                     sizeInfo: product.sizeInfo,
-                    categoryId: product.category.id,
+                    categoryId: product.categoryId,
                 });
 
-                // 이미지 리스트 초기화 (기존 이미지)
-                const existingImages: ImageItem[] = product.images.map(img => ({
+                const existingImages: ImageItem[] = (product.images || []).map(img => ({
                     type: "EXISTING",
                     url: img.url
                 }));
@@ -99,7 +91,6 @@ const AdminProductEdit = () => {
         loadData();
     }, [id, navigate]);
 
-    // 2. 핸들러: 텍스트 입력
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({
@@ -108,7 +99,6 @@ const AdminProductEdit = () => {
         }));
     };
 
-    // 3. 핸들러: 이미지 추가 (New File)
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
             const filesArray = Array.from(e.target.files);
@@ -122,11 +112,9 @@ const AdminProductEdit = () => {
         }
     };
 
-    // 4. 핸들러: 이미지 삭제
     const removeImage = (index: number) => {
         setImageList(prev => {
             const target = prev[index];
-            // 새 파일인 경우 메모리 해제
             if (target.type === "NEW") {
                 URL.revokeObjectURL(target.previewUrl);
             }
@@ -134,7 +122,6 @@ const AdminProductEdit = () => {
         });
     };
 
-    // 5. 최종 제출 (이미지 병합 -> 업로드 -> 수정 요청)
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -151,20 +138,16 @@ const AdminProductEdit = () => {
         try {
             setIsLoading(true);
 
-            // A. 이미지 URL 리스트 생성
-            // 순서를 보장하기 위해 map + Promise.all 사용
             const imageUrls = await Promise.all(
                 imageList.map(async (item) => {
                     if (item.type === "EXISTING") {
-                        return item.url; // 기존 URL 그대로 사용
+                        return item.url;
                     } else {
-                        return await uploadImage(item.file); // 새 파일 업로드 후 URL 반환
+                        return await uploadImage(item.file);
                     }
                 })
             );
 
-            // B. 상품 수정 API 호출
-            // imageUrls가 포함되면 백엔드에서 기존 이미지를 모두 지우고 이 리스트로 새로 연결함
             const submitData = {
                 ...formData,
                 imageUrls,
@@ -188,7 +171,6 @@ const AdminProductEdit = () => {
 
     return (
         <div className="max-w-4xl mx-auto py-8 mb-20">
-            {/* Header */}
             <div className="flex items-center gap-4 mb-10 border-b border-black/10 pb-4">
                 <button
                     onClick={() => navigate(-1)}
@@ -206,14 +188,13 @@ const AdminProductEdit = () => {
 
             <form onSubmit={handleSubmit} className="space-y-12">
 
-                {/* Section 1: Image Upload */}
+                {/* Image Upload */}
                 <div className="space-y-4">
                     <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest border-b border-gray-100 pb-2">
                         Product Images
                     </h2>
 
                     <div className="flex flex-wrap gap-4">
-                        {/* Upload Button */}
                         <div
                             onClick={() => fileInputRef.current?.click()}
                             className="w-32 h-32 border border-dashed border-gray-300 flex flex-col items-center justify-center cursor-pointer hover:border-black hover:bg-gray-50 transition-colors"
@@ -230,7 +211,6 @@ const AdminProductEdit = () => {
                             />
                         </div>
 
-                        {/* Previews (기존 + 신규 통합 표시) */}
                         {imageList.map((item, index) => {
                             const displayUrl = item.type === "EXISTING" ? item.url : item.previewUrl;
 
@@ -252,7 +232,6 @@ const AdminProductEdit = () => {
                                         </span>
                                     )}
 
-                                    {/* 기존/신규 구분 뱃지 (선택사항) */}
                                     {item.type === "NEW" && (
                                         <span className="absolute top-1 left-1 bg-blue-500 text-white text-[8px] px-1 rounded uppercase font-bold">
                                             New
@@ -264,7 +243,7 @@ const AdminProductEdit = () => {
                     </div>
                 </div>
 
-                {/* Section 2: Basic Info */}
+                {/* Basic Info */}
                 <div className="space-y-6">
                     <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest border-b border-gray-100 pb-2">
                         Basic Info
@@ -301,7 +280,7 @@ const AdminProductEdit = () => {
                                 name="name"
                                 value={formData.name}
                                 onChange={handleChange}
-                                className="w-full border-b border-gray-300 py-2 text-sm focus:border-black focus:outline-none transition-colors bg-transparent placeholder:text-gray-300"
+                                className="w-full border-b border-gray-300 py-2 text-sm focus:border-black focus:outline-none transition-colors bg-transparent"
                                 required
                             />
                         </div>
@@ -313,7 +292,7 @@ const AdminProductEdit = () => {
                                 name="price"
                                 value={formData.price}
                                 onChange={handleChange}
-                                className="w-full border-b border-gray-300 py-2 text-sm focus:border-black focus:outline-none transition-colors bg-transparent placeholder:text-gray-300"
+                                className="w-full border-b border-gray-300 py-2 text-sm focus:border-black focus:outline-none transition-colors bg-transparent"
                                 required
                             />
                         </div>
@@ -325,14 +304,14 @@ const AdminProductEdit = () => {
                                 name="summary"
                                 value={formData.summary}
                                 onChange={handleChange}
-                                className="w-full border-b border-gray-300 py-2 text-sm focus:border-black focus:outline-none transition-colors bg-transparent placeholder:text-gray-300"
+                                className="w-full border-b border-gray-300 py-2 text-sm focus:border-black focus:outline-none transition-colors bg-transparent"
                                 required
                             />
                         </div>
                     </div>
                 </div>
 
-                {/* Section 3: Detail Specs */}
+                {/* Detail Specs */}
                 <div className="space-y-6">
                     <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest border-b border-gray-100 pb-2">
                         Detail Specs

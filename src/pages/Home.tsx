@@ -252,7 +252,7 @@ function Home() {
             {/*TOP 베스트셀러 슬라이드*/}
             <div>
                 <div className={twMerge("pt-[55px]", "px-[50px]", "w-full", "pb-10")}>
-                    <p className={twMerge("text-[#111]", "text-[17px]", "font-[550]")}>TOP 20 베스트셀러</p>
+                    <p className={twMerge("text-[#111]", "text-[17px]", "font-[550]")}>TOP 10 베스트셀러</p>
                     <Link
                         to="/category/sunglasses/bestsellers"
                         className={twMerge("text-[12px]", "underline", "decoration-1")}

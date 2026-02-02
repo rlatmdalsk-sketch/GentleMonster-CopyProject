@@ -1,11 +1,10 @@
 import { useEffect, useState, useRef, type ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import { MdArrowBack, MdCloudUpload, MdClose, MdArrowForward } from "react-icons/md";
+import { MdArrowBack, MdCloudUpload, MdClose } from "react-icons/md";
 import { createProduct } from "../../../api/admin.product.api";
 import { uploadImage } from "../../../api/upload.api";
-import type { CreateProductInput } from "../../../types/admin.product";
 import type { Category } from "../../../types/category";
-import {getCategories} from "../../../api/category.api.ts";
+import { getCategories } from "../../../api/category.api.ts";
 
 interface FlatCategory extends Category {
     level: number;
@@ -21,7 +20,7 @@ const AdminProductCreate = () => {
     const [previewUrls, setPreviewUrls] = useState<string[]>([]);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const [formData, setFormData] = useState<Omit<CreateProductInput, "imageUrls">>({
+    const [formData, setFormData] = useState({
         name: "",
         price: 0,
         material: "",
@@ -31,7 +30,7 @@ const AdminProductCreate = () => {
         originCountry: "",
         Shape: "",
         sizeInfo: "",
-        categoryId: 0,
+        categoryIds: [] as number[], // 배열로 변경!
     });
 
     useEffect(() => {
@@ -55,37 +54,42 @@ const AdminProductCreate = () => {
         loadCategories();
     }, []);
 
-    const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({
             ...prev,
-            [name]: name === "price" || name === "categoryId" ? Number(value) : value
+            [name]: name === "price" ? Number(value) : value
         }));
     };
 
-    // 3. 핸들러: 이미지 선택 및 미리보기
+    // 카테고리 토글
+    const handleCategoryToggle = (categoryId: number) => {
+        setFormData(prev => ({
+            ...prev,
+            categoryIds: prev.categoryIds.includes(categoryId)
+                ? prev.categoryIds.filter(id => id !== categoryId)
+                : [...prev.categoryIds, categoryId]
+        }));
+    };
+
     const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
             const filesArray = Array.from(e.target.files);
             setSelectedFiles(prev => [...prev, ...filesArray]);
 
-            // 미리보기 URL 생성
             const newPreviews = filesArray.map(file => URL.createObjectURL(file));
             setPreviewUrls(prev => [...prev, ...newPreviews]);
         }
     };
 
-    // 4. 핸들러: 선택된 이미지 삭제
     const removeImage = (index: number) => {
         setSelectedFiles(prev => prev.filter((_, i) => i !== index));
         setPreviewUrls(prev => {
-            // 메모리 누수 방지: URL 해제
             URL.revokeObjectURL(prev[index]);
             return prev.filter((_, i) => i !== index);
         });
     };
 
-    // 5. 최종 제출 (이미지 업로드 -> 상품 생성)
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -93,26 +97,38 @@ const AdminProductCreate = () => {
             alert("최소 1개의 이미지를 등록해주세요.");
             return;
         }
-        if (formData.categoryId === 0) {
-            alert("카테고리를 선택해주세요.");
+        if (formData.categoryIds.length === 0) {
+            alert("최소 1개의 카테고리를 선택해주세요.");
             return;
         }
 
         try {
             setIsLoading(true);
 
-            // A. 이미지 순차 업로드 (병렬 처리 가능하지만 순서 보장을 위해 순차 혹은 Promise.all)
+            // 이미지 업로드
             const uploadPromises = selectedFiles.map(file => uploadImage(file));
             const imageUrls = await Promise.all(uploadPromises);
 
-            // B. 상품 생성 API 호출
-            const submitData: CreateProductInput = {
-                ...formData,
-                imageUrls,
-            };
+            // 선택된 각 카테고리마다 상품 생성
+            for (const categoryId of formData.categoryIds) {
+                const submitData = {
+                    name: formData.name,
+                    price: formData.price,
+                    material: formData.material,
+                    summary: formData.summary,
+                    collection: formData.collection,
+                    lens: formData.lens,
+                    originCountry: formData.originCountry,
+                    Shape: formData.Shape,
+                    sizeInfo: formData.sizeInfo,
+                    categoryId,
+                    imageUrls,
+                };
 
-            await createProduct(submitData);
-            alert("상품이 성공적으로 등록되었습니다.");
+                await createProduct(submitData);
+            }
+
+            alert(`${formData.categoryIds.length}개 카테고리에 상품이 성공적으로 등록되었습니다.`);
             navigate("/admin/product");
 
         } catch (error: any) {
@@ -191,54 +207,89 @@ const AdminProductCreate = () => {
                         Basic Info
                     </h2>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="grid grid-cols-1 gap-8">
+                        {/* 멀티 카테고리 선택 */}
                         <div className="space-y-2">
-                            <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Category</label>
-                            <div className="relative">
-                                <select
-                                    name="categoryId"
-                                    value={formData.categoryId}
-                                    onChange={handleChange}
-                                    className="w-full border-b border-gray-300 py-2 text-sm focus:border-black focus:outline-none transition-colors bg-transparent appearance-none cursor-pointer"
-                                    required
-                                >
-                                    <option value={0}>Select Category</option>
-                                    {categories.map((cat) => (
-                                        <option key={cat.id} value={cat.id}>
-                                            {"\u00A0".repeat(cat.level * 4) + cat.name}
-                                        </option>
-                                    ))}
-                                </select>
-                                <div className="absolute right-0 top-3 pointer-events-none text-gray-400">
-                                    <MdArrowForward className="text-xs rotate-90" />
-                                </div>
+                            <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">
+                                Categories (Multiple Selection)
+                            </label>
+
+                            {/* 선택된 카테고리 태그 */}
+                            <div className="flex flex-wrap gap-2 mb-3 min-h-[40px] p-3 border border-gray-200 rounded bg-gray-50">
+                                {formData.categoryIds.length === 0 ? (
+                                    <span className="text-xs text-gray-400">카테고리를 선택해주세요</span>
+                                ) : (
+                                    formData.categoryIds.map(id => {
+                                        const cat = categories.find(c => c.id === id);
+                                        return cat ? (
+                                            <span
+                                                key={id}
+                                                className="px-3 py-1.5 bg-black text-white text-xs rounded-full flex items-center gap-2"
+                                            >
+                                                {cat.name}
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleCategoryToggle(id)}
+                                                    className="hover:text-red-300 text-base font-bold leading-none"
+                                                >
+                                                    ×
+                                                </button>
+                                            </span>
+                                        ) : null;
+                                    })
+                                )}
+                            </div>
+
+                            {/* 카테고리 체크박스 리스트 */}
+                            <div className="border border-gray-300 rounded max-h-80 overflow-y-auto bg-white">
+                                {categories.map((cat) => (
+                                    <label
+                                        key={cat.id}
+                                        className="flex items-center px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0 transition-colors"
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            checked={formData.categoryIds.includes(cat.id)}
+                                            onChange={() => handleCategoryToggle(cat.id)}
+                                            className="mr-3 w-4 h-4 cursor-pointer"
+                                        />
+                                        <span
+                                            className="text-sm"
+                                            style={{ paddingLeft: `${cat.level * 20}px` }}
+                                        >
+                                            {cat.name}
+                                        </span>
+                                    </label>
+                                ))}
                             </div>
                         </div>
 
-                        <div className="space-y-2">
-                            <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Product Name</label>
-                            <input
-                                type="text"
-                                name="name"
-                                value={formData.name}
-                                onChange={handleChange}
-                                placeholder="ex) Lilit 01"
-                                className="w-full border-b border-gray-300 py-2 text-sm focus:border-black focus:outline-none transition-colors bg-transparent placeholder:text-gray-300"
-                                required
-                            />
-                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Product Name</label>
+                                <input
+                                    type="text"
+                                    name="name"
+                                    value={formData.name}
+                                    onChange={handleChange}
+                                    placeholder="ex) Lilit 01"
+                                    className="w-full border-b border-gray-300 py-2 text-sm focus:border-black focus:outline-none transition-colors bg-transparent placeholder:text-gray-300"
+                                    required
+                                />
+                            </div>
 
-                        <div className="space-y-2">
-                            <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Price (KRW)</label>
-                            <input
-                                type="number"
-                                name="price"
-                                value={formData.price}
-                                onChange={handleChange}
-                                placeholder="0"
-                                className="w-full border-b border-gray-300 py-2 text-sm focus:border-black focus:outline-none transition-colors bg-transparent placeholder:text-gray-300"
-                                required
-                            />
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Price (KRW)</label>
+                                <input
+                                    type="number"
+                                    name="price"
+                                    value={formData.price}
+                                    onChange={handleChange}
+                                    placeholder="0"
+                                    className="w-full border-b border-gray-300 py-2 text-sm focus:border-black focus:outline-none transition-colors bg-transparent placeholder:text-gray-300"
+                                    required
+                                />
+                            </div>
                         </div>
 
                         <div className="space-y-2">

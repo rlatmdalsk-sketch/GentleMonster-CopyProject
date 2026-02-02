@@ -190,7 +190,6 @@ const ProductDetailPage = () => {
                                                 />
                                             </div>
 
-                                            {/* 텍스트 정보: mt-4 등으로 이미지와의 간격을 미세 조정하세요 */}
                                             <div className="mt-4 text-[11px] leading-relaxed w-full px-[50px] text-left text-black">
                                                 <p className="font-bold">{item.name}</p>
                                                 <p>₩{item.price?.toLocaleString("ko-KR")}</p>
