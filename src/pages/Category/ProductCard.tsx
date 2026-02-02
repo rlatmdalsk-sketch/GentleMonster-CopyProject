@@ -20,10 +20,10 @@ const ProductCard = ({ product }: ProductCardProps) => {
                         src={mainImage}
                         alt={product.name}
                         // 고정 픽셀 대신 부모 박스에 꽉 차도록 수정
-                        className="w-full h-[751px] object-cover transition-transform duration-700 group-hover:scale-105"
+                        className="w-full h-[751px] object-cover transition-transform duration-700"
                     />
                     {/* 미세한 호버 오버레이 */}
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/[0.03] transition-colors duration-300" />
+                    <div className="absolute inset-0 bg-black/0  transition-colors duration-300" />
                 </div>
             </Link>
 
