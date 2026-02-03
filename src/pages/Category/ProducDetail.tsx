@@ -25,25 +25,32 @@ const ProductDetailPage = () => {
                 const currentProduct = response.product;
                 setProduct(currentProduct);
 
-                // 1. 현재 상품의 카테고리 ID 확보 (문자열일 수도 있으니 String으로 통일)
-                const targetCategoryId = currentProduct.category?.id || currentProduct.categoryId;
+                const targetMaterial = currentProduct.material;
 
-                if (targetCategoryId) {
+                if (targetMaterial) {
                     const productsResponse = await fetchProducts({ page: 1, limit: 100 });
-
-                    // 2. 응답 구조 대응 (배열인지 .data 안에 있는지 체크)
                     const allProducts = Array.isArray(productsResponse)
                         ? productsResponse
                         : (productsResponse.data || []);
 
-                    // 3. 필터링 로직 강화 (타입 차이 무시를 위해 == 사용 혹은 String 변환)
-                    const filtered = allProducts.filter((p: Product) => {
-                        const pCategoryId = p.category?.id || p.categoryId;
-                        // 본인 제외 && 카테고리 일치
-                        return String(pCategoryId) === String(targetCategoryId) && p.id !== currentProduct.id;
+                    // 🌟 상품 이름(name)을 키로 사용하여 중복 제거
+                    const uniqueByName = new Map();
+
+                    allProducts.forEach((p: Product) => {
+                        // 1. 현재 보고 있는 상품과 이름이 같으면 제외 (다른 카테고리에 있는 본인 제거)
+                        if (p.name === currentProduct.name) return;
+
+                        // 2. 소재(material) 비교
+                        const pMaterial = p.material?.toString().trim().toLowerCase();
+                        const tMaterial = targetMaterial.toString().trim().toLowerCase();
+
+                        // 3. 조건: 소재가 같고 + 아직 Map에 등록되지 않은 '이름'일 때만 추가
+                        if (pMaterial === tMaterial && !uniqueByName.has(p.name)) {
+                            uniqueByName.set(p.name, p);
+                        }
                     });
 
-                    setRelatedProducts(filtered);
+                    setRelatedProducts(Array.from(uniqueByName.values()));
                 }
             } catch (error) {
                 console.error("데이터 로드 실패", error);
@@ -149,9 +156,9 @@ const ProductDetailPage = () => {
                     </div>
                 </div>
             </div>
-            <div className="w-full border-t border-gray-100">
+            <div className="w-full ">
                 {/* 헤더: BestSeller와 동일한 패딩 및 폰트 설정 */}
-                <div className={twMerge("pt-[55px]", "px-[50px]", "w-full", "pb-10")}>
+                    <div className={twMerge("pt-[55px]", "px-[50px]", "w-full")}>
                     <p className={twMerge("text-[#111]", "text-[17px]", "font-[550]")}>유사한 프레임</p>
                 </div>
 
@@ -159,7 +166,7 @@ const ProductDetailPage = () => {
                     {relatedProducts.length > 0 ? (
                         <Swiper
                             modules={[FreeMode]}
-                            slidesPerView={1.5}
+                            slidesPerView={4.5}
                             spaceBetween={25}
                             grabCursor={true}
                             freeMode={{
@@ -169,9 +176,9 @@ const ProductDetailPage = () => {
                             }}
                             speed={800}
                             breakpoints={{
-                                768: { slidesPerView: 3.5 },
+                                768: { slidesPerView: 4.5 },
                                 1024: { slidesPerView: 4.5 },
-                                1440: { slidesPerView: 5.5 }
+                                1440: { slidesPerView: 4.5 }
                             }}
                             className="w-full h-[663px]"
                         >
@@ -179,7 +186,7 @@ const ProductDetailPage = () => {
                                 <SwiperSlide key={item.id}>
                                     <Link to={`/product/${item.id}`} className="block w-full h-full">
                                         {/* justify-between을 제거하여 요소들이 위에서부터 차례대로 쌓이게 합니다 */}
-                                        <div className="w-full h-full flex flex-col">
+                                        <div className="w-full h-full flex flex-col ml-10">
                                             {/* 이미지 영역: 높이를 고정하거나 비율을 조정하여 텍스트가 올라올 공간을 줍니다 */}
                                             <div className="w-full h-[500px] overflow-hidden relative">
                                                 <img
