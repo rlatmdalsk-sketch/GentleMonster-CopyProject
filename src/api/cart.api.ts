@@ -12,3 +12,11 @@ export const addToCart = async ( productId: number, quantity: number  ) => {
         quantity,
     });
 };
+
+export const updateCart = async (cartItemId: number, quantity: number) => {
+    return httpClient.put(`/cart/${cartItemId}`, { quantity });
+};
+
+export const removeCart = async (cartItemId: number) => {
+    return httpClient.delete(`/cart/${cartItemId}`);
+};

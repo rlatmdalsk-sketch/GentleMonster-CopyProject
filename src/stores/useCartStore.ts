@@ -1,28 +1,16 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { getCart, addToCart } from "../api/cart.api.ts";
+import { getCart, addToCart, updateCart, removeCart } from "../api/cart.api.ts";
 import type { CartItem } from "../types/Cart.ts";
 
 interface CartState {
     items: CartItem[];
     loading: boolean;
-
-    // 장바구니 목록 불러오기
     fetchCart: () => Promise<void>;
-
-    // 장바구니 상품 추가
     addItem: (productId: number, quantity: number) => Promise<void>;
-
-    // [미구현 API] 수량 변경 (현재는 로컬 상태만 변경하도록 설정 가능)
-    updateQuantity: (itemId: number, quantity: number) => Promise<void>;
-
-    // [미구현 API] 상품 삭제
-    removeItem: (itemId: number) => Promise<void>;
-
-    // 총 수량 계산
+    updateQuantity: (cartItemId: number, quantity: number) => Promise<void>;
+    removeItem: (cartItemId: number) => Promise<void>;
     getTotalCount: () => number;
-
-    // 총 결제 금액 계산
     getTotalPrice: () => number;
 }
 
@@ -37,8 +25,9 @@ const useCartStore = create<CartState>()(
                 set({ loading: true });
                 try {
                     const result = await getCart();
-                    // 서버 응답이 배열이면 result 그대로, { items: [] } 형식이면 result.items 사용
-                    set({ items: Array.isArray(result) ? result : (result as any).items || [] });
+                    // result가 { items: [...] } 구조인지, 아니면 배열 그 자체인지에 따라 처리
+                    const cartData = Array.isArray(result) ? result : (result as any).items || [];
+                    set({ items: cartData });
                 } catch (e) {
                     console.error("장바구니 로드 실패", e);
                 } finally {
@@ -50,54 +39,66 @@ const useCartStore = create<CartState>()(
             addItem: async (productId, quantity) => {
                 try {
                     await addToCart(productId, quantity);
-                    // 추가 후 최신 목록을 서버에서 다시 받아옴
-                    await get().fetchCart();
+                    await get().fetchCart(); // 목록 갱신
                 } catch (e) {
                     console.error("장바구니 담기 실패", e);
                     throw e;
                 }
             },
 
-            // 3. 수량 변경 (API 미구현으로 로컬에서만 동작하거나 대기)
-            updateQuantity: async (itemId, quantity) => {
+            // 3. 수량 변경
+            updateQuantity: async (cartItemId, quantity) => {
                 if (quantity < 1) return;
 
-                // API가 없으므로 로컬 UI만 우선 변경 (새로고침 시 복구됨)
                 const prevItems = get().items;
+
+                // 낙관적 업데이트
                 set({
                     items: prevItems.map(item =>
-                        item.id === itemId ? { ...item, quantity } : item,
+                        item.id === cartItemId ? { ...item, quantity } : item,
                     ),
                 });
 
-                console.warn("수량 변경 API가 아직 구현되지 않았습니다.");
-                // try { await updateCartItem(itemId, quantity); } catch (e) { set({ items: prevItems }); }
+                try {
+                    await updateCart(cartItemId, quantity); // 👈 API 함수명 수정
+                } catch (e) {
+                    console.error("수량 변경 실패", e);
+                    set({ items: prevItems }); // 실패 시 롤백
+                }
             },
 
-            // 4. 상품 삭제 (API 미구현으로 로컬에서만 동작)
-            removeItem: async (itemId) => {
+            // 4. 상품 삭제
+            removeItem: async (cartItemId) => {
                 const prevItems = get().items;
-                set({ items: prevItems.filter(item => item.id !== itemId) });
 
-                console.warn("삭제 API가 아직 구현되지 않았습니다.");
-                // try { await removeCartItem(itemId); } catch (e) { set({ items: prevItems }); }
+                set({ items: prevItems.filter(item => item.id !== cartItemId) });
+
+                try {
+                    await removeCart(cartItemId); // 👈 API 함수명 수정
+                } catch (e) {
+                    console.error("상품 삭제 실패", e);
+                    set({ items: prevItems }); // 실패 시 롤백
+                }
             },
 
-            // 5. 총 아이템 개수 계산
+            // 5. 총 수량 계산
             getTotalCount: () => {
-                return get().items.reduce((acc, item) => acc + item.quantity, 0);
+                const items = get().items || [];
+                return items.reduce((acc, item) => acc + (item.quantity || 0), 0);
             },
 
-            // 6. 총 가격 계산 (현재 product 구조에 맞춤: item.product.price)
+            // 6. 총 가격 계산
             getTotalPrice: () => {
-                return get().items.reduce(
-                    (acc, item) => acc + item.product.price * item.quantity,
-                    0,
-                );
+                const items = get().items || [];
+                return items.reduce((acc, item) => {
+                    const price = item.product?.price || 0;
+                    const qty = item.quantity || 0;
+                    return acc + (price * qty);
+                }, 0);
             },
         }),
         {
-            name: "cart-storage", // 로컬 스토리지에 저장될 이름
+            name: "cart-storage", // 로컬 스토리지 키
         },
     ),
 );

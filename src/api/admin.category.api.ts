@@ -19,3 +19,4 @@ export const deleteCategory = async (id: number) => {
     const response = await httpClient.delete(`/admin/categories/${id}`);
     return response.data;
 };
+
