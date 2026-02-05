@@ -113,8 +113,8 @@ export default function Header({ onLoginClick }: { onLoginClick: () => void }) {
                                 <div
                                     key={menu.id}
                                     onMouseEnter={e => handleMenuHover(menu.name, e)}
-                                    className="relative h-full flex items-center cursor-pointer">
-                                    <Link to={topMenuLink} className="text-[14px] font-[550]">
+                                    className="relative h-full flex items-center cursor-pointer ">
+                                    <Link to={topMenuLink} className="text-[14px] font-[550] ">
                                         {menu.name}
                                     </Link>
                                 </div>

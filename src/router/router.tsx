@@ -19,7 +19,8 @@ import AdminProductEdit from "../pages/Admin/product/AdminProductEdit.tsx";
 import ProductDetail from "../pages/Category/ProducDetail.tsx";
 import ShoppingBag from "../pages/Cart/shoppingBag.tsx";
 import ProfileLayout from "../layouts/ProfileLayout.tsx";
-import OrderList from "../pages/auth/orderList.tsx"; //
+import OrderList from "../pages/auth/orderList.tsx";
+import Order from "../pages/Cart/order.tsx"; //
 
 export const adminOnlyLoader = () => {
     const { isLoggedIn, user } = useAuthStore.getState();
@@ -58,6 +59,7 @@ const router = createBrowserRouter([
             { path: "product/:id", element: <ProductDetail /> },
 
             { path: "shoppingBag", element: <ShoppingBag />},
+            { path: "order", element: <Order />}
         ],
     },
 

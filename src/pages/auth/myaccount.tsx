@@ -6,13 +6,9 @@ function MyAccount() {
     const navigate = useNavigate();
 
     // 🌟 수정 1: 스토어에서 user 객체와 logout 함수를 꺼냅니다.
-    const {user, logout} = useAuthStore();
+    const {user} = useAuthStore();
 
-    const handleLogout = () => {
-        logout();
-        // 🌟 수정 2: 로그아웃 후 홈으로 보내면서 새로고침하고 싶다면:
-        window.location.href = "/";
-    };
+
 
     return (
         <>
