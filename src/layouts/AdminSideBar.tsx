@@ -9,6 +9,7 @@ import {
 import { Link, useLocation, useNavigate } from "react-router";
 import useAuthStore from "../stores/useAuthStore.ts";
 import { twMerge } from "tailwind-merge";
+import { AiOutlineProduct } from "react-icons/ai";
 
 const AdminSideBar = () => {
     const location = useLocation();
@@ -35,7 +36,7 @@ const AdminSideBar = () => {
     };
 
     return (
-        <aside className="w-64 bg-[#111111] text-white flex flex-col shrink-0 min-h-screen sticky top-0">
+        <aside className="w-64 bg-[#111111] text-white flex flex-col shrink-0 max-h-screen sticky top-0">
             <div className="p-8 text-white font-bold text-xl tracking-[0.2em] uppercase border-b border-white/5">
                 Gentle Admin
             </div>
@@ -66,6 +67,12 @@ const AdminSideBar = () => {
                     <div className={getMenuClass("/admin/product")}>
                         <MdInventory className="text-xl" />
                         <span>상품 관리</span>
+                    </div>
+                </Link>
+                <Link to="/admin/orderpage" className="block text-decoration-none">
+                    <div className={getMenuClass("/admin/orderpage")}>
+                        <AiOutlineProduct className="text-xl" />
+                        <span>주문 상태 관리</span>
                     </div>
                 </Link>
             </nav>

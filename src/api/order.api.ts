@@ -4,6 +4,8 @@ import type {
     OrderConfirmRequest,
     OrderDetailResponse,
     OrderListResponse,
+    OrderStatus,
+    OrderStatusData,
 } from "../types/order";
 import { httpClient } from "./axios.ts";
 
@@ -26,7 +28,6 @@ export const confirmOrder = async (data: OrderConfirmRequest) => {
 
 /**
  * 3. 주문 목록 조회 API
- * ✅ 백엔드 Prisma 에러(skip missing)를 방지하기 위해 page와 limit 기본값을 추가했습니다.
  */
 export const fetchOrderList = async (page = 1, limit = 10) => {
     const response = await httpClient.get<OrderListResponse>(`/orders`, {
@@ -35,7 +36,6 @@ export const fetchOrderList = async (page = 1, limit = 10) => {
             limit
         }
     });
-    // ✅ response.data 자체가 { data: OrderSummary[], pagination: ... } 구조입니다.
     return response.data;
 };
 
@@ -43,7 +43,6 @@ export const fetchOrderList = async (page = 1, limit = 10) => {
  * 4. 주문 상세 조회 API
  */
 export const fetchOrderDetail = async (orderId: number) => {
-    // 상세 조회 응답도 { message: '...', data: { ... } } 구조일 확률이 높으므로 확인이 필요합니다.
     const response = await httpClient.get<{ message: string; data: OrderDetailResponse }>(`/orders/${orderId}`);
     return response.data.data || response.data;
 };
@@ -54,6 +53,31 @@ export const fetchOrderDetail = async (orderId: number) => {
 export const cancelOrder = async (id: number, reason?: string) => {
     const response = await httpClient.patch<OrderCancel>(`/orders/${id}/cancel`, {
         message: reason || "사용자 요청에 의한 취소"
+    });
+    return response.data;
+};
+
+/**
+ * 6. 주문 상태 변경 API
+ */
+export const updateOrderStatus = async (id: number, data: OrderStatusData) => {
+    const response = await httpClient.patch<{ message: string }>(
+        `/admin/orders/${id}/status`,
+        data
+    );
+    return response.data;
+};
+
+/**
+ * 7.  전체 주문 목록 조회 API
+ */
+export const fetchAdminOrderList = async (page = 1, limit = 10, status?: OrderStatus) => {
+    const response = await httpClient.get<OrderListResponse>(`/admin/orders`, {
+        params: {
+            page,
+            limit,
+            status
+        }
     });
     return response.data;
 };

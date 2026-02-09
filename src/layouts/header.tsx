@@ -102,7 +102,7 @@ export default function Header({ onLoginClick }: { onLoginClick: () => void }) {
                                     ? "bg-[#f2f3f5]/60 backdrop-blur-xl text-black"
                                     : "bg-transparent text-white",
                         )}>
-                        <div className="grid grid-cols-3 items-center h-[90px] px-[60px]">
+                        <div className="grid grid-cols-3 items-center h-[90px] px-[60px] ">
                             <nav className="flex gap-5 h-full items-center">
                                 {displayMenu.map(menu => {
                                     const parentPath = menu.path.replace(/^\//, "");
@@ -118,7 +118,7 @@ export default function Header({ onLoginClick }: { onLoginClick: () => void }) {
                                             key={menu.id}
                                             onMouseEnter={e => handleMenuHover(menu.name, e)}
                                             className="relative h-full flex items-center cursor-pointer ">
-                                            <Link to={topMenuLink} className="text-[14px] font-[550] ">
+                                            <Link to={topMenuLink} className="text-[12px] font-[550] ">
                                                 {menu.name}
                                             </Link>
                                         </div>
@@ -198,7 +198,7 @@ export default function Header({ onLoginClick }: { onLoginClick: () => void }) {
                                                     key={subItem.id}
                                                     to={finalPath}
                                                     className={twMerge(
-                                                        "text-[13px] font-[500] hover:opacity-70 whitespace-nowrap",
+                                                        "text-[12px] font-[500] hover:opacity-70 whitespace-nowrap",
                                                         isVideoPassed ? "text-black" : "text-white"
                                                     )}
                                                 >

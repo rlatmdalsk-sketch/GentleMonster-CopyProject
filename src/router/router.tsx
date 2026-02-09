@@ -24,7 +24,8 @@ import OrderPage from "../pages/Cart/orderPage.tsx";
 import OrderSuccessPage from "../pages/Cart/orderSuccessPage.tsx";
 import OrderFailPage from "../pages/Cart/orderFailPage.tsx";
 import OrderDetail from "../pages/auth/orderDetail.tsx";
-import Search from "../pages/Search.tsx"; //
+import Search from "../pages/Search.tsx";
+import AdminOrderPage from "../pages/Admin/AdminOrderPage.tsx"; //
 
 export const adminOnlyLoader = () => {
     const { isLoggedIn, user } = useAuthStore.getState();
@@ -101,6 +102,12 @@ const router = createBrowserRouter([
                     { path: "edit/:id", element: <AdminProductEdit /> },
                 ],
             },
+            {
+                path: "orderpage",
+                children: [
+                    {index:true , element: <AdminOrderPage />}
+                ],
+            }
         ],
     },
 ]);

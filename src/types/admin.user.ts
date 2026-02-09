@@ -27,7 +27,7 @@ export interface CreateUserInput {
 
 export interface UpdateUserInput {
     email?: string;
-    password?: string; // 빈 값이면 수정 안 함
+    password?: string;
     name?: string;
     phone?: string;
     birthdate?: string;

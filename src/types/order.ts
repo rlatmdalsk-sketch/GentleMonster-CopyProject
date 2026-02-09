@@ -1,5 +1,5 @@
 /**
- * [기존 유지] 주문 항목 인터페이스
+ *  주문 항목 인터페이스
  */
 export interface OrderItem {
     productId: number;
@@ -7,7 +7,7 @@ export interface OrderItem {
 }
 
 /**
- * [기존 유지] 주문서 작성 요청 데이터 인터페이스 (Request Body)
+ *  주문서 작성 요청 데이터 인터페이스 (Request Body)
  */
 export interface CreateOrderRequest {
     items: OrderItem[];          // 주문할 상품 리스트
@@ -25,9 +25,15 @@ export type OrderStatus =
     | "PAID"
     | "SHIPPED"
     | "DELIVERED"
-    | "CANCELLED"
+    | "CANCELED"
     | "RETURN_REQUESTED"
     | "RETURN_COMPLETED";
+
+export interface OrderStatusData {
+    status: OrderStatus;
+    trackingNumber?: string;
+    carrier?: string;
+}
 
 /**
  * [기존 유지] 결제 승인 요청 데이터
@@ -44,12 +50,12 @@ export interface OrderConfirmRequest {
 export interface OrderDetailResponse {
     id: number;
     createdAt: string;
-    totalPrice: number;       // ✅ totalAmount -> totalPrice
+    totalPrice: number;
     status: string;
     recipientName: string;
     address1: string;
     address2: string;
-    items: OrderListItem[];   // ✅ 아래 OrderListItem 구조 사용
+    items: OrderListItem[];
 }
 
 /**
@@ -65,27 +71,25 @@ export interface OrderListResponse {
     };
 }
 
-/**
- * [수정] 개별 주문 요약 정보 (백엔드 실제 구조 맞춤)
- */
 export interface OrderSummary {
     id: number;
     createdAt: string;
-    totalPrice: number;        // ✅ 필드명 일치
+    totalPrice: number;
     status: string;
     recipientName: string;
     trackingNumber: string | null;
-    items: OrderListItem[];    // ✅ 아래 OrderListItem 구조 사용
+    items: OrderListItem[];
 }
 
 /**
- * [수정] 주문 목록 내의 개별 상품 정보 (백엔드 실제 구조 맞춤)
+ * [수정] 주문 목록 내의 개별 상품 정보
  */
+
 export interface OrderListItem {
     id: number;
     quantity: number;
     price: number;
-    product: {                 // ✅ productSize 계층 없이 바로 product
+    product: {
         name: string;
         images: { url: string }[];
     };
@@ -96,3 +100,4 @@ export interface OrderCancel {
     orderId: number;
     status: string;
 }
+

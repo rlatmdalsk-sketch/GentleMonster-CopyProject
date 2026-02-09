@@ -33,8 +33,8 @@ function OrderList() {
     );
 
     return (
-        <div className="max-w-[1100px] mx-auto px-6 py-10  shadow-md">
-            <header className="mb-12">
+        <div className="max-w-[1100px] mx-auto px-6 py-3  shadow-md">
+            <header className="mb-10">
                 <h2 className="text-[22px] font-bold tracking-tight text-black mb-2">주문 내역</h2>
                 <p className="text-[11px] text-gray-400 tracking-wider">ORDER HISTORY</p>
                 <div className="w-full h-[1px] bg-black mt-6" />
@@ -54,11 +54,11 @@ function OrderList() {
                     </div>
                 </div>
             ) : (
-                <div className="space-y-16 border-gray-200 p-4 flex flex-col gap-2">
+                <div className=" border-gray-200 p-4 flex flex-col gap-1">
                     {orders.map((order) => (
                         <div key={order.id} className="group">
                             {/* 주문 헤더 */}
-                            <div className="flex justify-between items-start pb-6 border-b border-gray-200">
+                            <div className="flex justify-between items-start pt-8 border-t border-gray-200">
                                 <div className="flex gap-12">
                                     <div className="flex flex-col">
                                         <span className="text-[9px] text-gray-400 font-bold uppercase tracking-widest mb-2">주문일자</span>
@@ -70,7 +70,7 @@ function OrderList() {
                                     </div>
                                     <div className="flex flex-col">
                                         <span className="text-[9px] text-gray-400 font-bold uppercase tracking-widest mb-2">주문상태</span>
-                                        <span className="text-[12px] font-semibold text-black">{order.status}</span>
+                                        <span className="text-[12px] font-semibold   text-blue-600">{order.status}</span>
                                     </div>
                                 </div>
 
@@ -122,7 +122,7 @@ function OrderList() {
                             </div>
 
                             {/* 하단 액션 버튼 */}
-                            <div className="mb-20 pt-6 border-t border-gray-100 flex justify-end">
+                            <div className="mb-10 pt-3 border-t border-gray-100 flex justify-end">
                                 <button
                                     onClick={() => navigate(`/myaccount/orderDetail?orderId=${order.id}`)}
                                     className="px-8 py-2.5 border border-black text-[10px] font-bold uppercase tracking-widest cursor-pointer "
