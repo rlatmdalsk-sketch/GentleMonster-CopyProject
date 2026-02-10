@@ -29,14 +29,12 @@ const ShoppingBag = () => {
 
     return (
         <div className="w-full min-h-screen pt-10 pb-20">
-            {/* 🌟 헤더는 어떤 상황에서도 이 자리에 고정됩니다. */}
             <CartWishHeader
                 totalCount={getTotalCount()}
                 wishlistCount={bookmarkedNames.size}
                 activeTab="cart"
             />
 
-            {/* 🌟 상품 유무에 따라 컨텐츠만 교체 (전체 구조는 유지) */}
             {items.length === 0 ? (
                 /* 상품이 없을 때 */
                 <div className="flex flex-col items-center w-full">

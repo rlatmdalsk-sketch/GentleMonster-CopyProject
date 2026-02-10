@@ -8,6 +8,8 @@ import useAuthStore from "../stores/useAuthStore.ts";
 import { Logo } from "../pages/components/Logo.tsx";
 import { getCategories } from "../api/category.api.ts";
 import SearchSlide from "../pages/components/SearchSlide.tsx";
+import useCartStore from "../stores/useCartStore.ts";
+import { LiaShoppingBagSolid } from "react-icons/lia";
 
 export default function Header({ onLoginClick }: { onLoginClick: () => void }) {
     const [categories, setCategories] = useState<any[]>([]);
@@ -17,6 +19,9 @@ export default function Header({ onLoginClick }: { onLoginClick: () => void }) {
     const location = useLocation();
     const { isLoggedIn } = useAuthStore();
     const [isSearchOpen, setIsSearchOpen] = useState(false);
+    const { items: cartItems } = useCartStore();
+
+    const totalCount = cartItems.reduce((acc, curr) => acc + (curr.quantity || 1), 0);
 
     const displayMenu = categories.length > 0 ? categories : [];
 
@@ -85,10 +90,7 @@ export default function Header({ onLoginClick }: { onLoginClick: () => void }) {
     return (
         <>
             <div className="relative w-full">
-                <SearchSlide
-                    isOpen={isSearchOpen}
-                    onClose={() => setIsSearchOpen(false)}
-                />
+                <SearchSlide isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
                 <div className="relative w-full">
                     <div
                         onMouseLeave={() => setHoveredMenu(null)}
@@ -98,18 +100,21 @@ export default function Header({ onLoginClick }: { onLoginClick: () => void }) {
                             !isHome
                                 ? "bg-[#f2f3f5] text-black"
                                 : isScrolled
-                                    ? "bg-[#f2f3f5]/60 backdrop-blur-xl text-black"
-                                    : "bg-transparent text-white",
+                                  ? "bg-[#f2f3f5]/60 backdrop-blur-xl text-black"
+                                  : "bg-transparent text-white",
                         )}>
                         <div className="grid grid-cols-3 items-center h-[90px] px-[60px] ">
                             <nav className="flex gap-6 h-full items-center">
                                 {displayMenu.map(menu => {
                                     const parentPath = menu.path.replace(/^\//, "");
-                                    const firstChildPath = menu.children && menu.children.length > 0
-                                        ? `/category/${parentPath}/${menu.children[0].path.replace(/^\//, "")}`
-                                        : fixPath(menu.path);
+                                    const firstChildPath =
+                                        menu.children && menu.children.length > 0
+                                            ? `/category/${parentPath}/${menu.children[0].path.replace(/^\//, "")}`
+                                            : fixPath(menu.path);
 
-                                    const isStoriesMenu = menu.name.includes("더 알아보기") || menu.path.includes("stories");
+                                    const isStoriesMenu =
+                                        menu.name.includes("더 알아보기") ||
+                                        menu.path.includes("stories");
                                     const topMenuLink = isStoriesMenu ? "/stories" : firstChildPath;
 
                                     return (
@@ -117,7 +122,9 @@ export default function Header({ onLoginClick }: { onLoginClick: () => void }) {
                                             key={menu.id}
                                             onMouseEnter={e => handleMenuHover(menu.name, e)}
                                             className="relative h-full flex items-center cursor-pointer ">
-                                            <Link to={topMenuLink} className="text-[13px] font-[450] ">
+                                            <Link
+                                                to={topMenuLink}
+                                                className="text-[13px] font-[450] ">
                                                 {menu.name}
                                             </Link>
                                         </div>
@@ -141,13 +148,14 @@ export default function Header({ onLoginClick }: { onLoginClick: () => void }) {
                                 <div className="flex items-center">
                                     <button
                                         onClick={() => setIsSearchOpen(true)}
-                                        className="p-1 hover:opacity-50 transition-opacity cursor-pointer"
-                                    >
-                                        <IoIosSearch size={24} />
+                                        className="p-1 hover:opacity-50 transition-opacity cursor-pointer">
+                                        <IoIosSearch size={25} />
                                     </button>
                                 </div>
                                 {isLoggedIn ? (
-                                    <Link to="/myaccount" className="p-1 hover:opacity-50 transition-opacity">
+                                    <Link
+                                        to="/myaccount"
+                                        className="p-1 hover:opacity-50 transition-opacity">
                                         <LuUser size={24} />
                                     </Link>
                                 ) : (
@@ -157,16 +165,26 @@ export default function Header({ onLoginClick }: { onLoginClick: () => void }) {
                                             onLoginClick();
                                         }}
                                         className="p-1 hover:opacity-50 transition-opacity">
-                                        <LuUser size={24} />
+                                        <LuUser size={25} />
                                     </button>
                                 )}
 
                                 <Link
                                     to="/shoppingBag"
                                     onClick={handleCartClick}
-                                    className="p-1 hover:opacity-50 transition-opacity"
-                                >
-                                    <RiShoppingBagLine size={24} />
+                                    className="p-1 hover:opacity-50 transition-opacity relative flex items-center justify-center">
+                                    <LiaShoppingBagSolid size={25} />
+
+                                    {totalCount > 0 && (
+                                        <span
+                                            className={twMerge(
+                                                "absolute pt-1.5", // 가방 손잡이 아래로 살짝 내리기 위한 패딩
+                                                "text-[10px] font-[450] leading-none",
+                                                !isHome || isScrolled ? "text-black" : "text-white",
+                                            )}>
+                                            {totalCount}
+                                        </span>
+                                    )}
                                 </Link>
                             </div>
                         </div>
@@ -182,11 +200,17 @@ export default function Header({ onLoginClick }: { onLoginClick: () => void }) {
                                         key={menu.id}
                                         className={twMerge(
                                             "flex flex-col gap-3",
-                                            hoveredMenu === menu.name ? "opacity-100" : "opacity-0 hidden",
+                                            hoveredMenu === menu.name
+                                                ? "opacity-100"
+                                                : "opacity-0 hidden",
                                         )}
-                                        style={{ marginLeft: `${menuPositions[menu.name] || 0}px` }}>
+                                        style={{
+                                            marginLeft: `${menuPositions[menu.name] || 0}px`,
+                                        }}>
                                         {menu.children?.map((subItem: any) => {
-                                            const isStories = menu.path.includes("stories") || subItem.path.includes("stories");
+                                            const isStories =
+                                                menu.path.includes("stories") ||
+                                                subItem.path.includes("stories");
 
                                             const finalPath = isStories
                                                 ? "/stories"
@@ -198,9 +222,8 @@ export default function Header({ onLoginClick }: { onLoginClick: () => void }) {
                                                     to={finalPath}
                                                     className={twMerge(
                                                         "text-[12.5px] font-[500] hover:opacity-70 whitespace-nowrap",
-                                                        isVideoPassed ? "text-black" : "text-white"
-                                                    )}
-                                                >
+                                                        isVideoPassed ? "text-black" : "text-white",
+                                                    )}>
                                                     {subItem.name}
                                                 </Link>
                                             );
