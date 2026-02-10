@@ -27,7 +27,10 @@ import OrderDetail from "../pages/auth/orderDetail.tsx";
 import Search from "../pages/Search.tsx";
 import AdminOrderPage from "../pages/Admin/AdminOrderPage.tsx";
 import WishListPage from "../pages/auth/WishList.tsx";
-import ShoppingBagWish from "../pages/Cart/shoppingBagWish.tsx"; //
+import ShoppingBagWish from "../pages/Cart/shoppingBagWish.tsx";
+import InquiryList from "../pages/inquiry/inquiryList.tsx";
+import inquiryWrite from "../pages/inquiry/inquiryWrite.tsx";
+import InquiryWirte from "../pages/inquiry/inquiryWrite.tsx"; //
 
 export const adminOnlyLoader = () => {
     const { isLoggedIn, user } = useAuthStore.getState();
@@ -51,7 +54,7 @@ const router = createBrowserRouter([
             { path: "register", element: <Register /> },
             {
                 path: "myaccount",
-                element: <ProfileLayout />, // 여기에 ProfileHeader가 포함되어 있음
+                element: <ProfileLayout />,
                 children: [
                     { index: true, element: <MyAccount /> },
                     { path: "profileEdit", element: <ProfileEdit /> },
@@ -77,7 +80,15 @@ const router = createBrowserRouter([
                     { path: "fail", element: <OrderFailPage /> },
                 ],
             },
-            {path: "search/:keyword", element: <Search />}
+            {path: "search/:keyword", element: <Search />},
+
+            {
+                path: "inquiry",
+                children: [
+                    {index: true, element: <InquiryList />},
+                    {path: "write", element: <InquiryWirte />}
+                ]
+            },
 
         ],
     },

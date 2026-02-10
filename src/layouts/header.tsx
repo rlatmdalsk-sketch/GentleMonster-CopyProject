@@ -2,7 +2,6 @@ import { twMerge } from "tailwind-merge";
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { IoIosSearch } from "react-icons/io";
-import { RiShoppingBagLine } from "react-icons/ri";
 import { LuUser } from "react-icons/lu";
 import useAuthStore from "../stores/useAuthStore.ts";
 import { Logo } from "../pages/components/Logo.tsx";
@@ -19,9 +18,20 @@ export default function Header({ onLoginClick }: { onLoginClick: () => void }) {
     const location = useLocation();
     const { isLoggedIn } = useAuthStore();
     const [isSearchOpen, setIsSearchOpen] = useState(false);
-    const { items: cartItems } = useCartStore();
+    const { items: cartItems, clearCart, fetchCart } = useCartStore();
 
-    const totalCount = cartItems.reduce((acc, curr) => acc + (curr.quantity || 1), 0);
+    const totalCount = isLoggedIn
+        ? cartItems.reduce((acc, curr) => acc + (curr.quantity || 1), 0)
+        : 0;
+
+    useEffect(() => {
+        if (isLoggedIn) {
+
+            fetchCart();
+        } else {
+            clearCart();
+        }
+    }, [isLoggedIn, fetchCart, clearCart]);
 
     const displayMenu = categories.length > 0 ? categories : [];
 
