@@ -44,7 +44,8 @@ const ProductCard = ({ product }: ProductCardProps) => {
                 <Bookmark
                     key={product.id}
                     productId={product.id}
-                    productName={product.name}// 🌟 현재 페이지 상품들 전달
+                    productName={product.name}
+                    allProducts={[product]}
                 />
             </div>
         </div>

@@ -102,7 +102,7 @@ export default function Header({ onLoginClick }: { onLoginClick: () => void }) {
                                     : "bg-transparent text-white",
                         )}>
                         <div className="grid grid-cols-3 items-center h-[90px] px-[60px] ">
-                            <nav className="flex gap-5 h-full items-center">
+                            <nav className="flex gap-6 h-full items-center">
                                 {displayMenu.map(menu => {
                                     const parentPath = menu.path.replace(/^\//, "");
                                     const firstChildPath = menu.children && menu.children.length > 0
@@ -117,7 +117,7 @@ export default function Header({ onLoginClick }: { onLoginClick: () => void }) {
                                             key={menu.id}
                                             onMouseEnter={e => handleMenuHover(menu.name, e)}
                                             className="relative h-full flex items-center cursor-pointer ">
-                                            <Link to={topMenuLink} className="text-[13px] font-[550] ">
+                                            <Link to={topMenuLink} className="text-[13px] font-[450] ">
                                                 {menu.name}
                                             </Link>
                                         </div>

@@ -1,18 +1,26 @@
 import { RxBookmark, RxBookmarkFilled } from "react-icons/rx";
+import { useOutletContext } from "react-router-dom"; // context를 쓰기 위해 추가
 import useAuthStore from "../../stores/useAuthStore";
 import useBookmarkStore from "../../stores/useBookMarkStore.ts";
+import useNotificationStore from "../../stores/useNotificationStore.ts";
 
 interface BookmarkProps {
     productId: number;
     productName: string;
-    allProducts?: any[]; // 현재 페이지의 상품들 (ID 추출용)
+    allProducts?: any[];
+}
+
+interface ContextType {
+    onLoginClick: () => void;
 }
 
 function Bookmark({ productId, productName, allProducts }: BookmarkProps) {
     const { isLoggedIn } = useAuthStore();
     const { bookmarkedNames, toggleBookmarkByName } = useBookmarkStore();
+    const { show } = useNotificationStore();
 
-    // 내 이름이 스토어의 북마크 셋에 있는지 확인
+    const { onLoginClick } = useOutletContext<ContextType>();
+
     const isBookmarked = bookmarkedNames.has(productName);
 
     const handleToggle = async (e: React.MouseEvent) => {
@@ -20,18 +28,39 @@ function Bookmark({ productId, productName, allProducts }: BookmarkProps) {
         e.stopPropagation();
 
         if (!isLoggedIn) {
-            alert("로그인이 필요합니다.");
+            onLoginClick();
             return;
         }
 
-        // 1. 이름이 같은 모든 ID 찾기
+        if (!isBookmarked) {
+            const currentProduct = allProducts?.length === 1
+                ? allProducts[0]
+                : allProducts?.find((p: any) => (p.product?.name || p.name) === productName);
+
+            const pData = currentProduct?.product || currentProduct;
+            const imgUrl = pData?.images?.[0]?.url || pData?.image;
+            const price = pData?.price;
+
+            if (imgUrl) {
+                const img = new Image();
+                img.src = imgUrl;
+            }
+
+            show(productName, {
+                id: productId,
+                name: productName,
+                price: price,
+                image: imgUrl,
+                images: imgUrl ? [{ url: imgUrl }] : []
+            });
+        }
+
         const targetIds = allProducts
             ? allProducts
                 .filter((p: any) => (p.product?.name || p.name) === productName)
                 .map((p: any) => p.product?.id || p.id)
             : [productId];
 
-        // 2. 스토어의 일괄 처리 함수 호출
         await toggleBookmarkByName(productName, [...new Set(targetIds)]);
     };
 

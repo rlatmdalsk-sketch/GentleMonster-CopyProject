@@ -7,6 +7,8 @@ import useAuthStore from "../../stores/useAuthStore.ts";
 import useCartStore from "../../stores/useCartStore.ts";
 import { useOutletContext } from "react-router";
 import { twMerge } from "tailwind-merge";
+import useNotificationStore from "../../stores/useNotificationStore.ts";
+
 
 const Wishlist = () => {
     const { onLoginClick } = useOutletContext<{ onLoginClick: () => void }>();
@@ -16,6 +18,7 @@ const Wishlist = () => {
 
     const [wishlist, setWishlist] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+    const { show } = useNotificationStore();
 
     const loadWishlist = async () => {
         try {
@@ -39,7 +42,7 @@ const Wishlist = () => {
                 ).values(),
             );
 
-            setWishlist(uniqueList); // 가공된 'uniqueList'를 상태로 설정
+            setWishlist(uniqueList);
         } catch (error) {
             console.error("위시리스트 로드 실패:", error);
         } finally {
@@ -57,11 +60,29 @@ const Wishlist = () => {
             onLoginClick();
             return;
         }
+
+
+        const targetItem = wishlist.find(item => {
+            const p = item.product || item;
+            return (p.id || item.productId) === productId;
+        });
+
+        if (!targetItem) return;
+        const product = targetItem.product || targetItem;
+
         try {
+
             await addItem(productId, 1);
-            if (window.confirm("장바구니에 상품을 담았습니다. 장바구니로 이동하시겠습니까?")) {
-                navigate("/shoppingBag");
-            }
+
+
+            show(product.name, {
+                id: productId,
+                name: product.name,
+                price: product.price,
+                image: product.images?.[0]?.url || product.image,
+                isCart: true
+            });
+
         } catch (e) {
             console.error(e);
             alert("장바구니 담기에 실패했습니다.");
@@ -148,6 +169,7 @@ const Wishlist = () => {
                                         key={product.id}
                                         productId={product.id}
                                         productName={product.name}
+                                        allProducts={[product]}
                                     />
                                 </div>
                             </Link>
@@ -164,6 +186,7 @@ const Wishlist = () => {
                                     "rounded-[8px]",
                                     " tracking-tight",
                                     "font-semibold",
+                                    "cursor-pointer",
                                     [
                                         "hover:bg-black",
                                         "hover:text-white",

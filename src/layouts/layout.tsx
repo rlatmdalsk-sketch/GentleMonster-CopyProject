@@ -5,6 +5,7 @@ import Footer from "./footer.tsx";
 import LoginDrawer from "../pages/components/LoginDrawer.tsx";
 import useAuthStore from "../stores/useAuthStore.ts";
 import useBookmarkStore from "../stores/useBookMarkStore.ts";
+import Notification from "../pages/components/Notification.tsx";
 
 function Layout() {
     const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -21,6 +22,7 @@ function Layout() {
     return (
         <div className="relative flex flex-col min-h-screen">
             {/* Header에 함수 전달 */}
+            <Notification />
             <Header onLoginClick={() => setIsLoginOpen(true)} />
 
             <div className="flex-1">

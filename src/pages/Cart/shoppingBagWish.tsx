@@ -10,6 +10,7 @@ import { getBookmarks } from "../../api/Bookmarks.api.ts";
 import CartWishHeader from "./CartWishHeader.tsx";
 import Bookmark from "../components/Bookmark.tsx";
 import useBookmarkStore from "../../stores/useBookmarkStore.ts";
+import useNotificationStore from "../../stores/useNotificationStore.ts";
 
 function ShoppingBagWish() {
     const { getTotalCount, addItem } = useCartStore();
@@ -21,6 +22,7 @@ function ShoppingBagWish() {
 
     const [wishlist, setWishlist] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+    const { show } = useNotificationStore();
 
     const loadWishlist = async () => {
         try {
@@ -61,11 +63,29 @@ function ShoppingBagWish() {
             onLoginClick();
             return;
         }
+
+
+        const targetItem = wishlist.find(item => {
+            const p = item.product || item;
+            return (p.id || item.productId) === productId;
+        });
+
+        if (!targetItem) return;
+        const product = targetItem.product || targetItem;
+
         try {
+
             await addItem(productId, 1);
-            if (window.confirm("장바구니에 상품을 담았습니다. 장바구니로 이동하시겠습니까?")) {
-                navigate("/shoppingBag");
-            }
+
+
+            show(product.name, {
+                id: productId,
+                name: product.name,
+                price: product.price,
+                image: product.images?.[0]?.url || product.image,
+                isCart: true
+            });
+
         } catch (e) {
             console.error(e);
             alert("장바구니 담기에 실패했습니다.");
@@ -143,6 +163,7 @@ function ShoppingBagWish() {
                                         key={product.id}
                                         productId={product.id}
                                         productName={product.name}
+                                        allProducts={[product]}
                                     />
                                 </div>
                             </Link>

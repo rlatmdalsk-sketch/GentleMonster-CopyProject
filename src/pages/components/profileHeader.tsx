@@ -1,57 +1,71 @@
 import { twMerge } from "tailwind-merge";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import useAuthStore from "../../stores/useAuthStore.ts";
 
 function ProfileHeader() {
-    // 🌟 Hook(useAuthStore)은 반드시 컴포넌트 함수 내부에서 호출해야 합니다.
     const { logout } = useAuthStore();
+    const location = useLocation();
 
     const handleLogout = () => {
-        logout();
-        window.location.href = "/";
+        if (window.confirm("로그아웃 하시겠습니까?")) {
+            logout();
+            window.location.href = "/";
+        }
+    };
+
+    const getButtonStyle = (path: string) => {
+        const isActive = location.pathname === path;
+
+        return twMerge(
+            "border cursor-pointer text-[12px] px-[11px] py-[7px] rounded-[20px] transition-colors border-[#dfe3e8]",
+            isActive
+                ? "bg-[#DFE3E8] text-[#111]" // 현재 페이지일 때 (고정)
+                : "text-[#858585] bg-none hover:bg-[#DFE3E8] hover:text-[#111]" // 평상시 + 호버
+        );
     };
 
     return (
-        <>
-            <div className={twMerge("ml-[60px]", "mt-5", "flex", "justify-between")}>
-                <div className={twMerge("flex", "gap-2")}>
-                    <Link to={"/myaccount"}>
-                        <button
-                            className={twMerge(
-                                "border cursor-pointer text-[12px] px-[11px] py-[7px] text-[#858585] bg-none rounded-[20px] border-[#dfe3e8] hover:bg-[#DFE3E8] hover:text-[#111] transition-colors"
-                            )}
-                        >
-                            계정
-                        </button>
-                    </Link>
-                    <Link to={"/myaccount/orderList"}>
-                        <button
-                            className={twMerge(
-                                "border cursor-pointer text-[12px] px-[11px] py-[7px] text-[#858585] bg-none rounded-[20px] border-[#dfe3e8] hover:bg-[#DFE3E8] hover:text-[#111] transition-colors"
-                            )}
-                        >
-                        구매한 제품
-                        </button>
-                    </Link>
-                    <Link to={"/myaccount/WishList"}>
-                        <button
-                            className={twMerge(
-                                "border cursor-pointer text-[12px] px-[11px] py-[7px] text-[#858585] bg-none rounded-[20px] border-[#dfe3e8] hover:bg-[#DFE3E8] hover:text-[#111] transition-colors"
-                            )}
-                        >
-                            위시 리스트
-                        </button>
-                    </Link>
-                </div>
+        <div className={twMerge("ml-[60px]","flex", "justify-between")}>
+            <div className={twMerge("flex", "gap-3")}>
+                <Link to="/myaccount">
+                    <button className={getButtonStyle("/myaccount")}>
+                        계정
+                    </button>
+                </Link>
 
-                <button
-                    onClick={handleLogout}
-                    className={twMerge("text-[13px]", "px-[11px]", "py-[7px]", "font-semibold", "mr-[60px]")}
-                >
-                    로그아웃
-                </button>
+                <Link to="/myaccount/orderList">
+                    <button className={getButtonStyle("/myaccount/orderList")}>
+                        구매한 제품
+                    </button>
+                </Link>
+
+                <Link to="/myaccount/WishList">
+                    <button className={getButtonStyle("/myaccount/WishList")}>
+                        위시 리스트
+                    </button>
+                </Link>
+                <Link to="/myaccount/profileEdit">
+                    <button className={getButtonStyle("/myaccount/profileEdit")}>
+                        프로필
+                    </button>
+                </Link>
             </div>
-        </>
+
+            <button
+                onClick={handleLogout}
+                className={twMerge(
+                    "text-[13px]",
+                    "px-[11px]",
+                    "py-[7px]",
+                    "font-semibold",
+                    "mr-[60px]",
+                    "cursor-pointer",
+                    "hover:text-[#111] transition-colors text-[#858585]"
+                )}
+            >
+                로그아웃
+            </button>
+        </div>
     );
 }
 

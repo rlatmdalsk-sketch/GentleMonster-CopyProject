@@ -20,17 +20,16 @@ const LoginDrawer = ({ isOpen, onClose }: Props) => {
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            // loginUser 호출
             const result = await loginUser({ email, password });
 
-            // 🌟 콘솔로 구조 확인 (result.data 안에 알맹이가 있는지 확인)
+
             console.log("로그인 응답 데이터:", result);
 
-            // 🌟 핵심 수정: 서버 응답이 { data: { user, token }, message: "..." } 구조임
-            if (result && result.data && result.data.token) {
-                const { user, token } = result.data; // data 주머니 안에서 꺼내기
 
-                // Zustand 스토어의 login 함수 호출
+            if (result && result.data && result.data.token) {
+                const { user, token } = result.data;
+
+
                 login(user, token);
 
                 alert(`${user.name}님, 환영합니다`);
@@ -42,18 +41,18 @@ const LoginDrawer = ({ isOpen, onClose }: Props) => {
         } catch (error: any) {
             console.error("로그인 실패", error);
 
-            // 에러 메시지 처리
+
             const errorMessage = error.response?.data?.message || "로그인 중 오류가 발생했습니다.";
             alert(errorMessage);
         }
     };
 
-    // 버튼 활성화 여부
+
     const isFormValid = email.length > 0 && password.length > 0;
 
     return (
         <>
-            {/* 배경 어둡게 처리 (Overlay) */}
+
             <div
                 className={twMerge(
                     "fixed inset-0 bg-black/30 z-[100] transition-opacity duration-300",
@@ -62,17 +61,17 @@ const LoginDrawer = ({ isOpen, onClose }: Props) => {
                 onClick={onClose}
             />
 
-            {/* 사이드바 본체 */}
+
             <div className={twMerge(
                 "fixed top-0 right-0 h-full w-full md:w-[40%] bg-white z-[101] shadow-2xl transform transition-transform duration-700 ease-in-out p-10 overflow-y-auto",
                 isOpen ? "translate-x-0" : "translate-x-full"
             )}>
-                {/* 닫기 버튼 */}
+
                 <button onClick={onClose} className="absolute top-6 right-6 text-gray-500 hover:text-black">
                     <LuX size={30} />
                 </button>
 
-                {/* 내용물 */}
+
                 <div className="mt-40 space-y-8">
                     <form onSubmit={handleLogin}>
                         <h2 className="text-[20px] font-bold mb-4">로그인 / 계정 생성</h2>
@@ -84,7 +83,7 @@ const LoginDrawer = ({ isOpen, onClose }: Props) => {
                         <div className="space-y-4">
                             <label className="text-[10px] text-gray-400 block">*필수 입력 항목</label>
 
-                            {/* 이메일 입력 */}
+
                             <input
                                 type="email"
                                 value={email}
@@ -93,7 +92,7 @@ const LoginDrawer = ({ isOpen, onClose }: Props) => {
                                 className="w-full border-b border-black py-2 outline-none text-[13px] focus:border-b-2 transition-all"
                             />
 
-                            {/* 비밀번호 입력 */}
+
                             <input
                                 type="password"
                                 value={password}
@@ -102,7 +101,7 @@ const LoginDrawer = ({ isOpen, onClose }: Props) => {
                                 className="w-full border-b border-black py-2 outline-none text-[13px] focus:border-b-2 transition-all"
                             />
 
-                            {/* 로그인 버튼 */}
+
                             <button
                                 type="submit"
                                 disabled={!isFormValid}
@@ -124,7 +123,7 @@ const LoginDrawer = ({ isOpen, onClose }: Props) => {
                         </div>
                     </form>
 
-                    {/* 소셜 로그인 섹션 */}
+
                     <div className="space-y-3 pt-10 border-t border-gray-100">
                         <p className="text-[10px] text-center text-gray-400">다른 옵션 보기</p>
                         <button

@@ -70,14 +70,14 @@ function ProfileEdit() {
                     <button
                         type="button"
                         onClick={() => navigate(-1)}
-                        className="flex-1 h-12 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
+                        className="flex-1 h-12 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors cursor-pointer"
                     >
                         취소
                     </button>
                     <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="flex-1 h-12 bg-black text-white rounded-md font-bold hover:bg-zinc-800 disabled:bg-gray-400"
+                        className="flex-1 h-12 bg-black text-white rounded-md font-bold hover:bg-zinc-800 disabled:bg-gray-400 cursor-pointer"
                     >
                         {isSubmitting ? "저장 중..." : "수정 완료"}
                     </button>

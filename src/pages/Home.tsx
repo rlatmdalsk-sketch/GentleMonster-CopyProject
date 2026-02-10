@@ -58,17 +58,15 @@ function Home() {
     const updateMediaControl = (swiper: any) => {
         if (!swiper) return;
 
-        // 1. 기존 애니메이션 중지
         if (timerRef.current) cancelAnimationFrame(timerRef.current);
 
-        // 2. 비디오 초기화
         const allVideos = document.querySelectorAll('video');
         allVideos.forEach(v => {
             v.pause();
             v.currentTime = 0;
         });
 
-        // 3. 누적형 페이지네이션 로직: 지나온 바는 채우고, 앞의 바는 비움
+        // 누적형 페이지네이션 로직: 지나온 바는 채우고, 앞의 바는 비움
         progressRef.current.forEach((bar, index) => {
             if (!bar) return;
             if (index < swiper.realIndex) {
@@ -76,7 +74,7 @@ function Home() {
             } else if (index > swiper.realIndex) {
                 bar.style.transform = 'scaleX(0)'; // 대기 중인 슬라이드
             }
-            // 현재 슬라이드(index === swiper.realIndex)는 아래 애니메이션 함수에서 실시간 처리
+
         });
 
         const currentData = SLIDES[swiper.realIndex];
@@ -136,38 +134,37 @@ function Home() {
                 <Swiper
                     onSwiper={setSwiperInstance}
                     loop={true}
-                    speed={600} // 너무 느리지 않게 살짝 조정 (기존 800 -> 600)
+                    speed={600}
                     autoplay={false}
                     navigation={true}
-                    threshold={5} // 반응 시작 지점을 낮춰 더 민감하게 반응하게 함
+                    threshold={5}
 
-                    // 1. 땡기는 힘을 약하게 (손가락 움직임에 슬라이드가 더 많이 따라오게)
-                    touchRatio={1.2} // 1보다 높이면 적은 힘(움직임)으로도 휙휙 따라옵니다.
+             다
+                    touchRatio={1.2}
 
-                    // 2. 적게 밀어도 다음으로 넘어가게 설정
-                    longSwipesRatio={0.2} // 기존 0.5(50%)에서 0.2(20%)로 변경. 조금만 밀어도 착! 넘어갑니다.
+
+                    longSwipesRatio={0.2}
 
                     followFinger={true}
-                    shortSwipes={true} // 가벼운 터치에도 반응하도록 다시 활성화
+                    shortSwipes={true}
 
                     resistance={true}
-                    resistanceRatio={0.85} // 끝부분 저항을 줄여서 더 부드럽게
+                    resistanceRatio={0.85}
 
                     touchAngle={45}
                     modules={[Pagination, Navigation]}
                     onSlideChangeTransitionEnd={updateMediaControl}
 
-                    // 3. 다른 요소(텍스트, 이미지)가 드래그되어 따라오는 현상 방지
+
                     className={twMerge(
                         "w-full h-full relative cursor-e-resize active:cursor-grabbing select-none",
                         [
-                            "[&_img]:pointer-events-none", // 이미지 드래그 방지 (중요!)
-                            "[&_button]:select-none",      // 버튼 텍스트 선택 방지
+                            "[&_img]:pointer-events-none",
+                            "[&_button]:select-none",
                             "[&_.swiper-button-next]:after:!content-none",
                             "[&_.swiper-button-prev]:after:!content-none",
                             "[&_.swiper-button-next]:!opacity-0",
                             "[&_.swiper-button-prev]:!opacity-0",
-                            // 버튼 영역을 최소화하여 드래그 간섭 차단
                             "[&_.swiper-button-next]:!w-[40px] [&_.swiper-button-prev]:!w-[40px]"
                         ]
                     )}
@@ -236,14 +233,13 @@ function Home() {
                 <div className={twMerge("pt-[55px]", "px-[50px]", "w-full")}>
                     <p className={twMerge("text-[#111]", "text-[19px]", "font-[550]")}>새롭게 선보이는 젠틀몬스터 신제품</p>
                     <Link
-                        to="/category/sunglasses/view-all"
+                        to="/category/collections/c-2026-collection"
                         className={twMerge("text-[15px]", "underline", "decoration-1")}
                     >
                         더보기
                     </Link>
                 </div>
 
-                {/* 슬라이더 영역: 텍스트 바로 아래 붙도록 설정 */}
                 <div >
                     <LookBookSlider />
                 </div>

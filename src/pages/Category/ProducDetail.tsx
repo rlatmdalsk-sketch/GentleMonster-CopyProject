@@ -9,6 +9,7 @@ import useAuthStore from "../../stores/useAuthStore.ts";
 import useCartStore from "../../stores/useCartStore.ts";
 import { useOutletContext } from "react-router";
 import Bookmark from "../components/Bookmark.tsx";
+import useNotificationStore from "../../stores/useNotificationStore.ts";
 
 
 const ProductDetailPage = () => {
@@ -17,6 +18,7 @@ const ProductDetailPage = () => {
     const navigate = useNavigate();
     const { isLoggedIn } = useAuthStore();
     const { addItem } = useCartStore();
+    const { show } = useNotificationStore();
 
     const [product, setProduct] = useState<Product | null>(null);
     const [loading, setLoading] = useState(true);
@@ -76,9 +78,17 @@ const ProductDetailPage = () => {
         try {
             await addItem(Number(id), 1);
 
-            if (window.confirm("장바구니에 상품을 담았습니다. 장바구니로 이동하시겠습니까?")) {
+           /* if (window.confirm("장바구니에 상품을 담았습니다. 장바구니로 이동하시겠습니까?")) {
                 navigate("/shoppingBag");
-            }
+            }*/
+            show(product.name, {
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                image: product.images?.[0]?.url || product.image,
+                isCart: true
+            });
+
         } catch (e) {
             console.error(e);
             alert("장바구니 담기에 실패했습니다.");
@@ -127,6 +137,7 @@ const ProductDetailPage = () => {
                                 key={product.id}
                                 productId={product.id}
                                 productName={product.name}
+                                allProducts={[product]}
                             />
                         </div>
 
