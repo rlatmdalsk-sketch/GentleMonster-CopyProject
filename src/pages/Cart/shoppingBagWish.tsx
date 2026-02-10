@@ -79,10 +79,10 @@ function ShoppingBagWish() {
             </div>
         );
 
-    // 1. 상품이 없을 때: ShoppingBag과 완벽 동일 레이아웃
+
     if (wishlist.length === 0) {
         return (
-            <div className="w-full h-screen flex flex-col items-center py-16">
+            <div className="w-full h-screen flex flex-col items-center py-10">
                 <CartWishHeader
                     totalCount={getTotalCount()}
                     wishlistCount={0}
@@ -100,71 +100,80 @@ function ShoppingBagWish() {
         );
     }
 
-    // 2. 상품이 있을 때: ShoppingBag의 컨테이너 및 aside 공간 유지
     return (
-        <div className="w-full min-h-screen pt-10 pb-20">
+        <div className="w-full min-h-screen pt-10 pb-10">
             <CartWishHeader
                 totalCount={getTotalCount()}
                 wishlistCount={bookmarkedNames.size}
                 activeTab="wishlist"
             />
-
-            <div className="flex flex-col lg:flex-row mx-auto items-start px-10">
-                {/* 좌측 상품 영역: ShoppingBag의 ml-100과 동일한 여백 적용 */}
-                <div className="flex-1 space-y-12 flex flex-col justify-center items-center overflow-hidden lg:ml-100">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-x-10 gap-y-16 py-10 w-full">
-                        {wishlist.map((item) => {
-                            const product = item.product || item;
-                            const productId = product.id || item.productId;
-                            return (
-                                <div
-                                    key={productId}
-                                    className="flex flex-col group w-full max-w-[300px] mx-auto"
-                                >
-                                    <Link to={`/product/${productId}`}>
-                                        <div className="mb-6 bg-[#f5f5f5] aspect-[3/4] overflow-hidden relative">
-                                            <img
-                                                src={product.images?.[0]?.url || product.image || "/placeholder.jpg"}
-                                                alt={product.name}
-                                                className="w-full h-full object-cover scale-180"
-                                            />
-                                        </div>
-                                    </Link>
-
-                                    <div className="flex justify-between items-start mb-4 px-1">
-                                        <Link to={`/product/${productId}`} className="flex flex-col text-[11px]">
-                                            <p className="font-medium text-[#111] uppercase tracking-tight">
-                                                {product.name}
-                                            </p>
-                                            <p className="font-medium text-[#111]">
-                                                ₩{product.price?.toLocaleString()}
-                                            </p>
-                                        </Link>
-                                        <Bookmark
-                                            productId={Number(productId)}
-                                            productName={product.name}
-                                            allProducts={wishlist}
-                                        />
-                                    </div>
-
-                                    <button
-                                        onClick={() => handleAddToCart(Number(productId))}
-                                        className={twMerge(
-                                            "bg-[#e3e5e6] w-[100px] h-[32px] text-[#111] text-[10px] rounded-[8px] tracking-tight font-semibold",
-                                            "hover:bg-black hover:text-white transition-all duration-300"
-                                        )}
-                                    >
-                                        쇼핑백에 추가하기
-                                    </button>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-10 ">
+                {wishlist.map(item => {
+                    const product = item.product || item;
+                    const productId = product.id || item.productId;
+                    return (
+                        <div
+                            key={productId}
+                            className="flex flex-col group w-[350px] h-[650px] mx-auto">
+                            {/* 상품 이미지 */}
+                            <Link to={`/product/${productId}`}>
+                                <div className="mb-6  aspect-[3/4] overflow-hidden relative">
+                                    <img
+                                        src={
+                                            product.images?.[0]?.url ||
+                                            product.image ||
+                                            "/placeholder.jpg"
+                                        }
+                                        alt={product.name}
+                                        className="w-full h-full object-cover scale-180"
+                                    />
                                 </div>
-                            );
-                        })}
-                    </div>
-                </div>
 
-                {/* 우측 aside 영역 대칭용: ShoppingBag의 aside 크기와 동일하게 비워둠 */}
-                <aside className="hidden lg:block w-full md:w-[30%] lg:w-[420px] px-8 md:px-12 py-20"></aside>
+                                {/* 정보 영역 */}
+                                <div className="flex justify-between items-start mb-2  px-1">
+                                    <div className="flex flex-col  text-[11px]">
+                                        <p className="font-medium text-[#111] uppercase tracking-tight">
+                                            {product.name}
+                                        </p>
+                                        <p className="font-medium text-[#111]">
+                                            ₩{product.price?.toLocaleString()}
+                                        </p>
+                                    </div>
+                                    <Bookmark
+                                        key={product.id}
+                                        productId={product.id}
+                                        productName={product.name}
+                                    />
+                                </div>
+                            </Link>
+
+                            <button
+                                onClick={() => handleAddToCart(Number(productId))}
+                                className={twMerge(
+                                    "bg-[#e3e5e6] ",
+                                    "cursor-pointer",
+                                    "max-w-[80px]",
+                                    "h-[30px]",
+                                    "py-[5px]",
+                                    "text-[#111]",
+                                    " text-[9px]",
+                                    "rounded-[8px]",
+                                    " tracking-tight",
+                                    "font-semibold",
+                                    [
+                                        "hover:bg-black",
+                                        "hover:text-white",
+                                        "transition-all",
+                                        "duration-300",
+                                    ],
+                                )}>
+                                쇼핑백에 추가하기
+                            </button>
+                        </div>
+                    );
+                })}
             </div>
+
         </div>
     );
 }

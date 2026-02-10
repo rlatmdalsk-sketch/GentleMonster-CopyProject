@@ -1,6 +1,6 @@
 import { RxBookmark, RxBookmarkFilled } from "react-icons/rx";
-import useBookmarkStore from "../../stores/useBookmarkStore";
 import useAuthStore from "../../stores/useAuthStore";
+import useBookmarkStore from "../../stores/useBookMarkStore.ts";
 
 interface BookmarkProps {
     productId: number;
@@ -36,7 +36,7 @@ function Bookmark({ productId, productName, allProducts }: BookmarkProps) {
     };
 
     return (
-        <button onClick={handleToggle} className="p-2 transition-transform active:scale-90">
+        <button onClick={handleToggle} className="p-2 transition-transform active:scale-90 cursor-pointer">
             {isBookmarked ? (
                 <RxBookmarkFilled className="text-[23px] text-black" />
             ) : (

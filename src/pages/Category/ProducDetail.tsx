@@ -123,7 +123,11 @@ const ProductDetailPage = () => {
                             <h1 className="text-[16px] font-medium tracking-tight text-[#111]">
                                 {product.name}
                             </h1>
-                            <Bookmark productId={Number(id)} />
+                            <Bookmark
+                                key={product.id}
+                                productId={product.id}
+                                productName={product.name}
+                            />
                         </div>
 
                         <p className="text-[13px] font-normal text-[#111] mb-6">

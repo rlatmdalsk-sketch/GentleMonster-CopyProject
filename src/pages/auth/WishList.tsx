@@ -152,7 +152,6 @@ const Wishlist = () => {
                                 </div>
                             </Link>
 
-                            {/* 쇼핑백 추가 버튼 */}
                             <button
                                 onClick={() => handleAddToCart(Number(productId))}
                                 className={twMerge(
