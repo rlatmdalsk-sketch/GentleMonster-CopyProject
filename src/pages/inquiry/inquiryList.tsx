@@ -2,12 +2,11 @@ import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchInquiryList } from "../../api/inquiry.api";
 import type { InquiryItem, InquiryType, InquiryStatus } from "../../types/inquiry";
-import { twMerge } from "tailwind-merge";
 
 const InquiryList = () => {
     const navigate = useNavigate();
 
-    // 데이터 상태
+
     const [inquiries, setInquiries] = useState<InquiryItem[]>([]);
     const [pagination, setPagination] = useState({
         current: 1,
@@ -15,12 +14,12 @@ const InquiryList = () => {
         totalCount: 0,
     });
 
-    // UI 상태
+
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const limit = 5;
 
-    // 데이터 로드 API
+
     const loadInquiries = async (page: number) => {
         setIsLoading(true);
         setError(null);
@@ -169,7 +168,7 @@ const InquiryList = () => {
                                             <span
                                                 className={
                                                     inquiry.status === "ANSWERED"
-                                                        ? "text-black"
+                                                        ? "text-blue-500"
                                                         : "font-medium"
                                                 }>
                                                 {labels.status(inquiry.status)}

@@ -25,9 +25,7 @@ export default function Dashboard() {
         const loadDashboardData = async () => {
             try {
                 const result = await fetchAllUsers(1);
-                console.log("🛠️ API 실제 응답 데이터:", result); // 브라우저 콘솔에서 확인 필수
 
-                // 만약 response.data 안에 또 data가 들어있는 구조라면 아래와 같이 대응합니다.
                 const actualData = result.data || [];
                 const total = result.pagination?.totalUsers || 0;
 
@@ -52,7 +50,6 @@ export default function Dashboard() {
         <div className="min-h-screen  flex font-sans text-black">
 
             <main className="flex-1 p-12 space-y-12">
-                {/* 헤더: 로그인 유저(adminInfo) 연동 */}
                 <div className="flex justify-between items-end border-b border-black pb-4">
                     <div className="space-y-1">
                         <h1 className="text-2xl font-bold tracking-tighter uppercase font-serif">Admin Overview</h1>

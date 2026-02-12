@@ -77,7 +77,7 @@ const AdminSideBar = () => {
                     </div>
                 </Link>
                 <Link to="/admin/inquiry" className="block text-decoration-none">
-                    <div className={getMenuClass("/inquiry")}>
+                    <div className={getMenuClass("/admin/inquiry")}>
                         <AiOutlineProduct className="text-xl" />
                         <span>문의 관리</span>
                     </div>

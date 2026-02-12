@@ -17,18 +17,15 @@ const AdminInquiryList = () => {
     const [searchQuery, setSearchQuery] = useState("");
     const limit = 10;
 
-    // 2. 관리자 전용 fetch 함수 호출
     const loadInquiries = async (page: number) => {
         setIsLoading(true);
         try {
             const response = await fetchAdminInquiryList(page, limit);
-            console.log("Admin API Response:", response.data); // 데이터 들어오는지 확인용
-
             setInquiries(response.data);
             setTotalPages(response.pagination.totalPages);
             setTotalItems(response.pagination.total);
         } catch (err) {
-            console.error("관리자 데이터 로드 실패", err);
+            console.error(err);
         } finally {
             setIsLoading(false);
         }
@@ -47,7 +44,7 @@ const AdminInquiryList = () => {
             const query = searchQuery.toLowerCase();
             result = result.filter(item =>
                 item.title.toLowerCase().includes(query) ||
-                item.user?.name.toLowerCase().includes(query) // 이제 user.name이 들어올 겁니다!
+                item.user?.name.toLowerCase().includes(query)
             );
         }
         return result;
@@ -63,12 +60,11 @@ const AdminInquiryList = () => {
 
     return (
         <div className="space-y-6">
-            {/* --- Header Area --- */}
             <div className="flex justify-between items-end pb-4 border-b border-black/10">
                 <div>
-                    <h1 className="text-2xl font-bold uppercase tracking-[0.15em] text-[#111]">Inquiry Management</h1>
-                    <p className="text-[10px] text-gray-500 mt-2 tracking-widest uppercase font-black">
-                        Admin Mode / Total {totalItems} Cases
+                    <h1 className="text-2xl font-bold uppercase tracking-[0.15em] text-[#111]">문의 내역 관리</h1>
+                    <p className="text-xs text-gray-500 mt-2 tracking-wider uppercase">
+                        전체 문의 조회 및 관리 /  ({totalItems} 개)
                     </p>
                 </div>
 
@@ -102,7 +98,6 @@ const AdminInquiryList = () => {
                 </div>
             </div>
 
-            {/* --- Table Area --- */}
             <div className="bg-white border border-gray-100 min-h-[500px]">
                 {isLoading ? (
                     <div className="p-20 text-center text-[10px] text-gray-400 tracking-[0.2em] font-bold uppercase animate-pulse">Loading Admin Data...</div>
@@ -130,7 +125,6 @@ const AdminInquiryList = () => {
                                     <td className="p-4 text-[11px] font-bold text-[#111]">{labels[item.type]}</td>
                                     <td className="p-4">
                                         <div className="flex flex-col">
-                                            {/* 📍 관리자 API를 쓰면 이 부분이 정상적으로 나올 겁니다! */}
                                             <span className="text-xs font-bold text-[#111]">{item.user?.name || "Unknown"}</span>
                                             <span className="text-[9px] text-gray-400">{item.user?.email || "-"}</span>
                                         </div>
@@ -145,7 +139,7 @@ const AdminInquiryList = () => {
                                         {new Date(item.createdAt).toLocaleDateString()}
                                     </td>
                                     <td className="p-4 text-right">
-                                            <span className={`text-[10px] font-black uppercase tracking-widest ${item.status === "PENDING" ? "text-red-500" : "text-black"}`}>
+                                            <span className={`text-[10px] font-black uppercase tracking-widest ${item.status === "PENDING" ? "text-red-500" : "text-blue-500"}`}>
                                                 {item.status === "PENDING" ? "답변대기" : "답변완료"}
                                             </span>
                                     </td>
@@ -156,7 +150,6 @@ const AdminInquiryList = () => {
                     </div>
                 )}
             </div>
-
 
             <div className="flex justify-center gap-4 pt-6">
                 <button disabled={currentPage === 1} onClick={() => setCurrentPage(prev => prev - 1)} className="p-1 disabled:opacity-20 hover:text-black transition-colors text-gray-400">
