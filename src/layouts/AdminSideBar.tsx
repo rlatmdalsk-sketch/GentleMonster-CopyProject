@@ -9,7 +9,7 @@ import {
 import { Link, useLocation, useNavigate } from "react-router";
 import useAuthStore from "../stores/useAuthStore.ts";
 import { twMerge } from "tailwind-merge";
-import { AiOutlineProduct } from "react-icons/ai";
+import { AiOutlineProduct, AiOutlineSolution } from "react-icons/ai";
 import AdminInquiryList from "../pages/Admin/inquiry/AdminInquiryList.tsx";
 
 const AdminSideBar = () => {
@@ -78,7 +78,7 @@ const AdminSideBar = () => {
                 </Link>
                 <Link to="/admin/inquiry" className="block text-decoration-none">
                     <div className={getMenuClass("/admin/inquiry")}>
-                        <AiOutlineProduct className="text-xl" />
+                        <AiOutlineSolution className="text-xl" />
                         <span>문의 관리</span>
                     </div>
                 </Link>
