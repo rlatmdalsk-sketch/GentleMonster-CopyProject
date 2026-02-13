@@ -85,7 +85,7 @@ const ProductDetailPage = () => {
                 id: product.id,
                 name: product.name,
                 price: product.price,
-                image: product.images?.[0]?.url || product.image,
+                image: product.images?.[0]?.url,
                 isCart: true
             });
 
@@ -280,7 +280,7 @@ const ProductDetailPage = () => {
                                             {/* 이미지 영역: 높이를 고정하거나 비율을 조정하여 텍스트가 올라올 공간을 줍니다 */}
                                             <div className="w-full h-[500px] overflow-hidden relative">
                                                 <img
-                                                    src={item.images?.[0]?.url || item.image}
+                                                    src={item.images?.[0]?.url}
                                                     alt={item.name}
                                                     className="w-full h-[150%] object-cover"
                                                     style={{ transform: "translateY(-160px)" }}

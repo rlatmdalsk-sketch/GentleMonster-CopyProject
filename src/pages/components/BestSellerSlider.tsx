@@ -74,7 +74,7 @@ function BestSellerSlider() {
                                     <div className="w-full h-full flex flex-col pt-10">
                                         <div className="w-full h-[75%] overflow-hidden relative">
                                             <img
-                                                src={item.images?.[0]?.url || item.image}
+                                                src={item.images?.[0]?.url}
                                                 alt={item.name}
                                                 className="w-full h-full object-contain scale-200"
                                             />

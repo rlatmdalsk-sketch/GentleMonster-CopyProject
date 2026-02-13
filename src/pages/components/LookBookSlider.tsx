@@ -78,7 +78,7 @@ function LookBookSlider() {
                             <div className="relative w-full h-full group">
                                 <Link to={`/product/${slide.id}`} className="w-full h-full block overflow-hidden">
                                     <img
-                                        src={slide.images?.[0]?.url || slide.image}
+                                        src={slide.images?.[0]?.url}
                                         alt={slide.name}
                                         /* 🌟 scale을 살짝 주어 박스 안을 더 꽉 채우도록 수정 */
                                         className="w-full h-full object-contain scale-170"
@@ -115,10 +115,9 @@ function LookBookSlider() {
                                     key={`thumb-${slide.id}`}
                                     className="cursor-pointer"
                                 >
-                                    {/* 🌟 박스 크기를 100x100으로 유지하되 scale로 사진 강조 */}
                                     <div className="w-[100px] h-[100px] flex items-center justify-center overflow-hidden">
                                         <img
-                                            src={slide.images?.[0]?.url || slide.image}
+                                            src={slide.images?.[0]?.url}
                                             className="w-full h-full object-contain scale-125"
                                         />
                                     </div>
