@@ -9,7 +9,7 @@ function Search() {
     const { keyword } = useParams<{ keyword: string }>();
     const [products, setProducts] = useState<Product[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage] = useState(1);
     const [searchInput, setSearchInput] = useState("");
     const navigate = useNavigate();
 

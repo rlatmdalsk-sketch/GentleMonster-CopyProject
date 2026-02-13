@@ -11,7 +11,7 @@ import "swiper/css/navigation";
 import {Swiper, SwiperSlide} from 'swiper/react';
 import {twMerge} from "tailwind-merge";
 import {Pagination, Navigation} from "swiper/modules";
-import {Link, useNavigate } from "react-router-dom";
+import {Link } from "react-router-dom";
 import LookBookSlider from "./components/LookBookSlider.tsx";
 import BestSellerSlider from "./components/BestSellerSlider.tsx";
 

@@ -1,6 +1,7 @@
 export interface CategoryContent {
     title: string;
     description: string;
+    image?: string;
 }
 
 // Record 안에 또 Record가 들어가는 구조입니다.

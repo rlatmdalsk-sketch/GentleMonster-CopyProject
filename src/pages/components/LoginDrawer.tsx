@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { LuX } from "react-icons/lu";
 import { twMerge } from "tailwind-merge";
 import useAuthStore from "../../stores/useAuthStore.ts";

@@ -100,7 +100,7 @@ function LookBookSlider() {
                 <div className="flex flex-col items-center justify-center mt-12 mb-20 w-full">
                     <div className="flex items-center pb-2">
                         <Swiper
-                            onSwiper={setThumbsSwiper}
+                            onSwiper={(swiper) => setThumbsSwiper(swiper)}
                             modules={[FreeMode, Thumbs, Controller]}
                             slidesPerView={4}
                             spaceBetween={5} // 간격을 살짝 벌려 가독성 확보

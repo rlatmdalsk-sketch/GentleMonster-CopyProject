@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useOutletContext } from "react-router";
 import { twMerge } from "tailwind-merge";
 
@@ -9,15 +9,15 @@ import { getBookmarks } from "../../api/Bookmarks.api.ts";
 
 import CartWishHeader from "./CartWishHeader.tsx";
 import Bookmark from "../components/Bookmark.tsx";
-import useBookmarkStore from "../../stores/useBookmarkStore.ts";
+
 import useNotificationStore from "../../stores/useNotificationStore.ts";
+import useBookmarkStore from "../../stores/useBookMarkStore.ts";
 
 function ShoppingBagWish() {
     const { getTotalCount, addItem } = useCartStore();
     const { bookmarkedNames } = useBookmarkStore();
     const { isLoggedIn } = useAuthStore();
 
-    const navigate = useNavigate();
     const { onLoginClick } = useOutletContext<{ onLoginClick: () => void }>();
 
     const [wishlist, setWishlist] = useState<any[]>([]);

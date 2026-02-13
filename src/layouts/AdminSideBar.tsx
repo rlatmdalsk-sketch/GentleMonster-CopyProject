@@ -10,7 +10,6 @@ import { Link, useLocation, useNavigate } from "react-router";
 import useAuthStore from "../stores/useAuthStore.ts";
 import { twMerge } from "tailwind-merge";
 import { AiOutlineProduct, AiOutlineSolution } from "react-icons/ai";
-import AdminInquiryList from "../pages/Admin/inquiry/AdminInquiryList.tsx";
 
 const AdminSideBar = () => {
     const location = useLocation();

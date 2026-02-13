@@ -36,7 +36,7 @@ function Input({
                 {...props}
                 autoComplete="off"
             />
-            {error && <span className="text-xs text-red-500">{error}</span>}
+            {error && <span className="error">{error.message}</span>}
         </div>
     );
 }

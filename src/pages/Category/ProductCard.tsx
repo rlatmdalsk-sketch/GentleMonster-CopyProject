@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import type { Product } from "../../types/product";
 import Bookmark from "../components/Bookmark.tsx";
 
