@@ -13,6 +13,7 @@ export interface AdminInquiryItem {
     type: "DELIVERY" | "PRODUCT" | "EXCHANGE_RETURN" | "MEMBER" | "OTHER";
     title: string;
     content: string;
+    userId: number;
     status: "PENDING" | "ANSWERED";
     answer: string | null;
     answeredAt: string | null;

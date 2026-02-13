@@ -56,7 +56,10 @@ export interface OrderDetailResponse {
     address1: string;
     address2: string;
     items: OrderListItem[];
+    orderNumber: string;
+    totalAmount: number;
 }
+
 
 /**
  * [신규] 주문 목록 전체 응답 구조
@@ -68,6 +71,11 @@ export interface OrderListResponse {
         totalPages: number;
         currentPage: number;
         limit: number;
+        orderNumber: string;
+        totalAmount: number;
+        address1: string;
+        address2: string;
+        recipientPhone: string;
     };
 }
 
@@ -79,6 +87,12 @@ export interface OrderSummary {
     recipientName: string;
     trackingNumber: string | null;
     items: OrderListItem[];
+    orderNumber: string;
+    totalAmount: number;
+    address1: string;
+    address2: string;
+    recipientPhone: string;
+
 }
 
 /**

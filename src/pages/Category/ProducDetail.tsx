@@ -15,7 +15,6 @@ import useNotificationStore from "../../stores/useNotificationStore.ts";
 const ProductDetailPage = () => {
     const { onLoginClick } = useOutletContext<{ onLoginClick: () => void }>();
     const { id } = useParams<{ id: string }>();
-    const navigate = useNavigate();
     const { isLoggedIn } = useAuthStore();
     const { addItem } = useCartStore();
     const { show } = useNotificationStore();

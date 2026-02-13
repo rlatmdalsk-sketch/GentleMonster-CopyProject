@@ -6,6 +6,7 @@ interface BookmarkState {
     loading: boolean;
     fetchBookmarks: () => Promise<void>;
     toggleBookmarkByName: (productName: string, targetIds: number[]) => Promise<void>;
+    idMapByName: Record<string, number>;
 }
 
 const useBookmarkStore = create<BookmarkState>((set, get) => ({

@@ -17,6 +17,7 @@ export interface Product {
     material: string;
     summary: string;
     collection: string;
+    categoryId: number;
     lens: string;
     originCountry: string;
     Shape: string;
