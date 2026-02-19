@@ -65,13 +65,25 @@ function LookBookSlider() {
                 {/* 1. 메인 슬라이더: 사진 크기 체감 확대 */}
                 <Swiper
                     modules={[FreeMode, Thumbs, Controller]}
+                    onSwiper={setThumbsSwiper}
                     thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }}
-                    slidesPerView={2.5}
-                    centeredSlides={false}
-                    spaceBetween={0}
+
+                    slidesPerView={1}
+                    spaceBetween={10}
                     grabCursor={true}
                     speed={800}
-                    className="w-full h-[700px]"
+
+                    breakpoints={{
+                        768: {
+                            slidesPerView: 2.5,
+                            spaceBetween: 15,
+                        },
+                        1024: {
+                            slidesPerView: 3.5,
+                            spaceBetween: 0,
+                        }
+                    }}
+                    className="w-full h-[500px] md:h-[700px]"
                 >
                     {products.map((slide) => (
                         <SwiperSlide key={slide.id}>
@@ -80,15 +92,14 @@ function LookBookSlider() {
                                     <img
                                         src={slide.images?.[0]?.url}
                                         alt={slide.name}
-                                        /* 🌟 scale을 살짝 주어 박스 안을 더 꽉 채우도록 수정 */
-                                        className="w-full h-full object-contain scale-170"
+                                        className="w-full h-full object-contain scale-[1.4] md:scale-170"
                                     />
                                 </Link>
 
-                                <div className="absolute bottom-10 left-10 pointer-events-none">
+                                <div className="absolute bottom-6 left-6 md:bottom-10 md:left-10 pointer-events-none">
                                     <div className="flex flex-col gap-0.5 text-black">
-                                        <p className="text-[13px] font-bold uppercase tracking-tighter">{slide.name}</p>
-                                        <p className="text-[12px] tracking-tighter">₩{slide.price?.toLocaleString()}</p>
+                                        <p className="text-[12px] md:text-[13px] font-bold uppercase tracking-tighter">{slide.name}</p>
+                                        <p className="text-[11px] md:text-[12px] tracking-tighter">₩{slide.price?.toLocaleString()}</p>
                                     </div>
                                 </div>
                             </div>
@@ -97,28 +108,27 @@ function LookBookSlider() {
                 </Swiper>
 
                 {/* 2. 하단 아이템 뷰: 박스 내 사진 크기 키우기 */}
-                <div className="flex flex-col items-center justify-center mt-12 mb-20 w-full">
-                    <div className="flex items-center pb-2">
+                <div className="flex flex-col items-center justify-center mt-8 md:mt-12 mb-10 md:mb-20 w-full">
+                    <div className="flex items-center pb-2 w-full justify-center">
                         <Swiper
                             onSwiper={(swiper) => setThumbsSwiper(swiper)}
                             modules={[FreeMode, Thumbs, Controller]}
                             slidesPerView={4}
-                            spaceBetween={5} // 간격을 살짝 벌려 가독성 확보
+                            spaceBetween={5}
                             watchSlidesProgress={true}
                             slideToClickedSlide={true}
                             freeMode={true}
-                            /* 🌟 4칸이 보일 수 있도록 너비 확장 (100px * 4 + 여백) */
-                            className="w-[400px]"
+                            className="w-[90%] max-w-[400px]"
                         >
                             {products.map((slide) => (
                                 <SwiperSlide
                                     key={`thumb-${slide.id}`}
                                     className="cursor-pointer"
                                 >
-                                    <div className="w-[100px] h-[100px] flex items-center justify-center overflow-hidden">
+                                    <div className="w-full aspect-square flex items-center justify-center overflow-hidden border border-gray-100 md:border-none">
                                         <img
                                             src={slide.images?.[0]?.url}
-                                            className="w-full h-full object-contain scale-125"
+                                            className="w-full h-full object-contain scale-110 md:scale-125"
                                         />
                                     </div>
                                 </SwiperSlide>

@@ -60,13 +60,23 @@ function BestSellerSlider() {
                 {bestProducts.length > 0 ? (
                     <Swiper
                         modules={[FreeMode]}
-                        slidesPerView={4.2}
+                        slidesPerView={1}
                         spaceBetween={10}
                         loop={true}
                         grabCursor={true}
                         freeMode={{ enabled: true, sticky: true, momentum: false }}
                         speed={800}
-                        className="w-full h-[550px]"
+                        breakpoints={{
+                            768: {
+                                slidesPerView: 2.5,
+                                spaceBetween: 15,
+                            },
+                            1024: {
+                                slidesPerView: 3.5,
+                                spaceBetween: 10,
+                            }
+                        }}
+                        className="w-full h-[450px] md:h-[550px]" // 모바일 높이 살짝 조절
                     >
                         {bestProducts.map((item) => (
                             <SwiperSlide key={item.id}>

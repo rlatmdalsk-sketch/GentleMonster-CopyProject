@@ -230,36 +230,44 @@ function Home() {
             </section>
             {/*신제품 슬라이드*/}
             <div>
-                <div className={twMerge("pt-[55px]", "px-[50px]", "w-full")}>
-                    <p className={twMerge("text-[#111]", "text-[19px]", "font-[550]")}>새롭게 선보이는 젠틀몬스터 신제품</p>
+                <div className={twMerge("pt-[40px] md:pt-[55px]", "px-5 md:px-[50px]", "w-full flex flex-col items-start")}>
+                    <p className={twMerge("text-[#111]", "text-[17px] md:text-[19px]", "font-[550]")}>
+                        새롭게 선보이는 젠틀몬스터 신제품
+                    </p>
                     <Link
                         to="/category/collections/c-2026-collection"
-                        className={twMerge("text-[15px]", "underline", "decoration-1")}
+                        className={twMerge("text-[13px] md:text-[15px]", "underline", "decoration-1", "mt-1")}
                     >
                         더보기
                     </Link>
                 </div>
 
-                <div >
+                <div className="mt-4 md:mt-0">
                     <LookBookSlider />
                 </div>
             </div>
 
             {/*TOP 베스트셀러 슬라이드*/}
             <div>
-                <div className={twMerge("pt-[55px]", "px-[50px]", "w-full", "pb-10")}>
-                    <p className={twMerge("text-[#111]", "text-[19px]", "font-[550]")}>TOP 10 베스트셀러</p>
+                {/* 패딩 수정: px-[50px] -> px-5(모바일) / md:px-[50px](PC) */}
+                <div className={twMerge("pt-[40px] md:pt-[55px]", "px-5 md:px-[50px]", "w-full pb-6 md:pb-10")}>
+                    <p className={twMerge("text-[#111]", "text-[17px] md:text-[19px]", "font-[550]")}>
+                        TOP 10 베스트셀러
+                    </p>
                     <Link
                         to="/category/collections/bestseller"
-                        className={twMerge("text-[15px]", "underline", "decoration-1")}
+                        className={twMerge("text-[13px] md:text-[15px]", "underline", "decoration-1", "mt-1")}
                     >
                         더보기
                     </Link>
                 </div>
-                <div >
+
+                <div className="mt-2 md:mt-0">
                     <BestSellerSlider />
                 </div>
             </div>
+
+            <div className="h-20" />
         </div>
     );
 }
