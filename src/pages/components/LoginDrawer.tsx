@@ -23,7 +23,6 @@ const LoginDrawer = ({ isOpen, onClose }: Props) => {
             const result = await loginUser({ email, password });
 
 
-            console.log("로그인 응답 데이터:", result);
 
 
             if (result && result.data && result.data.token) {

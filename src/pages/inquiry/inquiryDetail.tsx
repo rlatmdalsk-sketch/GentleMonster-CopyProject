@@ -18,11 +18,9 @@ export default function InquiryDetail() {
     const loadData = async (inquiryId: number) => {
         try {
             const data = await fetchInquiryDetail(inquiryId);
-            console.log("📦 불러온 데이터:", data);
             setInquiry(data);
         } catch (error) {
-            console.error("로드 실패", error);
-            alert("문의 내용을 불러오지 못했습니다.");
+            console.log("로드 실패",error);
             navigate("/inquiry");
         } finally {
             setLoading(false);
