@@ -27,8 +27,8 @@ function Register() {
         setError("root", { message: "" });
         try {
             await registerUser(data);
-            alert("회원가입이 완료되었습니다!");
-            navigate("/");
+            alert("회원가입이 완료되었습니다! 로그인해주세요");
+            navigate("/")
         } catch (error) {
             console.error("오류 발생:", error);
             let message = "처리에 실패했습니다.";

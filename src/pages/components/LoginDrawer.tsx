@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { LuX } from "react-icons/lu";
 import { twMerge } from "tailwind-merge";
 import useAuthStore from "../../stores/useAuthStore.ts";
@@ -15,6 +15,7 @@ const LoginDrawer = ({ isOpen, onClose }: Props) => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -33,6 +34,8 @@ const LoginDrawer = ({ isOpen, onClose }: Props) => {
 
                 alert(`${user.name}님, 환영합니다`);
                 window.location.href = "";
+                navigate("");
+
             } else {
                 console.error("구조 불일치:", result);
                 alert("서버 응답 형식이 올바르지 않습니다.");
