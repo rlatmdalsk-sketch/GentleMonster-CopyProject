@@ -15,7 +15,6 @@ const LoginDrawer = ({ isOpen, onClose }: Props) => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const navigate = useNavigate();
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -33,7 +32,6 @@ const LoginDrawer = ({ isOpen, onClose }: Props) => {
 
                 alert(`${user.name}님, 환영합니다`);
                 window.location.href = "";
-                navigate("");
 
             } else {
                 console.error("구조 불일치:", result);
