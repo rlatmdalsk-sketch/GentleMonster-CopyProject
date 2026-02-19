@@ -49,27 +49,26 @@ const ShoppingBag = () => {
                     </Link>
                 </div>
             ) : (
-                /* 상품이 있을 때 */
-                <div className="flex flex-col lg:flex-row mx-auto items-start px-10">
-                    {/* 좌측: 상품 리스트 영역 */}
-                    <div className="flex-1 space-y-12 flex flex-col justify-center items-center overflow-hidden lg:ml-100">
+                <div className="flex flex-col lg:flex-row mx-auto items-start px-6 md:px-10 max-w-[1600px]">
+
+                    <div className="flex-1 w-full space-y-12 flex flex-col items-center lg:pl-[30%]">
                         {items.map(item => (
                             <div
                                 key={item.id}
-                                className="flex md:flex-row items-center gap-10 pb-12 m-auto overflow-hidden px-50 pt-40"
+                                className="flex flex-col md:flex-row items-center gap-6 md:gap-10 pb-12 w-full max-w-[800px] border-b border-gray-100 md:border-none"
                             >
                                 <Link
                                     to={`/product/${item.product.id}`}
-                                    className="w-[280px] h-[280px] flex items-center justify-center bg-transparent cursor-pointer hover:opacity-90 transition-opacity"
+                                    className="w-[280px] h-[280px] max-w-full flex items-center justify-center bg-transparent cursor-pointer hover:opacity-90 transition-opacity overflow-hidden"
                                 >
                                     <img
                                         src={item.product.images?.[0]?.url}
                                         alt={item.product.name}
-                                        className={twMerge("scale-280", "mb-30")}
+                                        className="w-full h-full object-contain scale-200 pb-5"
                                     />
                                 </Link>
 
-                                <div className="flex-1 flex flex-col w-full z-20 pl-5 pb-15">
+                                <div className="flex-1 flex flex-col w-full z-20 px-2">
                                     <h3 className="text-[11px] font-[450] text-[#111]">
                                         {item.product.name}
                                     </h3>
@@ -78,31 +77,24 @@ const ShoppingBag = () => {
                                     </p>
 
                                     <div className="mt-2 text-[11px]">
-                                        <div className="flex items-center gap-2 justify-center text-center">
+                                        <div className="flex items-center gap-2 sm:justify-start justify-center">
                                             <span>수량</span>
                                             <select
                                                 value={item.quantity}
                                                 onChange={e =>
                                                     updateQuantity(item.id, Number(e.target.value))
                                                 }
-                                                className="flex border-none outline-none font-[450] px-4 text-[12px] py-1 mx-auto text-center"
+                                                className="border-none outline-none font-[450] px-2 py-1 text-[12px] bg-transparent"
                                             >
-                                                {Array.from({ length: 10 }, (_, i) => i + 1).map(
-                                                    num => (
-                                                        <option key={num} value={num}>
-                                                            {num}
-                                                        </option>
-                                                    ),
-                                                )}
+                                                {Array.from({ length: 10 }, (_, i) => i + 1).map(num => (
+                                                    <option key={num} value={num}>{num}</option>
+                                                ))}
                                             </select>
                                         </div>
                                     </div>
                                     <button
-                                        onClick={() => {
-                                            if (window.confirm("상품을 삭제하시겠습니까?"))
-                                                removeItem(item.id);
-                                        }}
-                                        className="text-111 text-[10px] mt-2 p-2 bg-[#e2e4e5] rounded-md mr-auto font-semibold"
+                                        onClick={() => window.confirm("상품을 삭제하시겠습니까?") && removeItem(item.id)}
+                                        className="text-[#111] text-[10px] mt-4 p-2 bg-[#e2e4e5] rounded-md sm:mr-auto font-semibold w-fit mx-auto sm:mx-0"
                                     >
                                         삭제하기
                                     </button>

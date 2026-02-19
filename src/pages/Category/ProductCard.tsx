@@ -14,14 +14,13 @@ const ProductCard = ({ product }: ProductCardProps) => {
     return (
         <div className="group relative w-full">
             <Link to={`/product/${product.id}`} className="block">
-                <div className="relative aspect-[3/4] overflow-hidden mb-4">
+                <div className="relative aspect-[3/4] overflow-hidden mb-3 md:mb-4">
                     <img
                         src={mainImage}
                         alt={product.name}
-                        className="w-full h-[751px] object-cover transition-transform duration-700 group-hover:scale-105"
+                        className="w-full h-full object-cover transition-transform duration-700 scale-130"
                     />
-                    {/* 미세한 호버 오버레이 */}
-                    <div className="absolute inset-0 bg-black/0  transition-colors duration-300" />
+                    <div className="absolute inset-0 bg-black/0 transition-colors duration-300" />
                 </div>
             </Link>
 

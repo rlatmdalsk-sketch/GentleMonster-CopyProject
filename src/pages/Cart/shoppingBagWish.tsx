@@ -134,7 +134,7 @@ function ShoppingBagWish() {
                     return (
                         <div
                             key={productId}
-                            className="flex flex-col group w-[350px] h-[650px] mx-auto">
+                            className="flex flex-col group max-w-[350px] h-[650px] mx-auto">
                             {/* 상품 이미지 */}
                             <Link to={`/product/${productId}`}>
                                 <div className="mb-6  aspect-[3/4] overflow-hidden relative">

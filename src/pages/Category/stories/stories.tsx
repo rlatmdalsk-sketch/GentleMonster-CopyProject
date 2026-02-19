@@ -62,36 +62,37 @@ const STORIES = [
 
 export default function Stories() {
     return (
-        <div className="  w-full">
+        <div className="w-full">
             {/* 개별 캠페인 섹션 */}
             {STORIES.map((story) => (
-                <Link to={""}>
-                <section key={story.id} className="relative w-full border-b border-gray-100 last:border-none">
-                    {/* 이미지 컨테이너: 가로 전체 차지 */}
-                    <div className="w-full h-[80vh] min-h-[500px] overflow-hidden">
-                        <img
-                            src={story.image}
-                            alt={story.title}
-                            className="w-full h-full object-cover "
-                        />
-                    </div>
+                <Link key={story.id} to={""}>
+                    <section className="relative w-full border-b border-gray-100 last:border-none group">
+                        {/* 1. 이미지 컨테이너: h-[60vh](모바일) -> h-[80vh](PC) */}
+                        <div className="w-full h-[60vh] md:h-[80vh] min-h-[400px] md:min-h-[500px] overflow-hidden">
+                            <img
+                                src={story.image}
+                                alt={story.title}
+                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                            />
+                        </div>
 
-                    {/* 텍스트 정보: 이미지 바로 아래 혹은 위에 겹치게 설정 가능 */}
-                    <div className="px-[60px] py-16 mobile:px-[20px] flex flex-col items-start">
-                        <span className="text-[12px] font-bold tracking-[0.2em] text-gray-400 mb-4">
-                            {story.category}
-                        </span>
-                        <h2 className="text-[28px] font-bold tracking-tighter mb-4">
-                            {story.title}
-                        </h2>
-                        <p className="text-[14px] text-gray-600 max-w-xl leading-relaxed mb-6">
-                            {story.description}
-                        </p>
-                        <button className="text-[13px] font-bold border-b border-black pb-1 hover:text-gray-500 hover:border-gray-500 transition-all">
-                            자세히 보기
-                        </button>
-                    </div>
-                </section>
+                        {/* 2. 텍스트 영역: px-6(모바일) -> md:px-[60px](PC) */}
+                        <div className="px-6 md:px-[60px] py-10 md:py-16 flex flex-col items-start bg-white">
+                            <span className="text-[10px] md:text-[12px] font-bold tracking-[0.2em] text-gray-400 mb-2 md:mb-4">
+                                {story.category}
+                            </span>
+                            <h2 className="text-[22px] md:text-[28px] font-bold tracking-tighter mb-3 md:mb-4 text-[#111]">
+                                {story.title}
+                            </h2>
+                            {/* 3. 설명글 너비: w-full max-w-xl 적용 */}
+                            <p className="text-[13px] md:text-[14px] text-gray-600 w-full max-w-xl leading-relaxed mb-6">
+                                {story.description}
+                            </p>
+                            <button className="text-[12px] md:text-[13px] font-bold border-b border-black pb-1 hover:text-gray-500 hover:border-gray-500 transition-all">
+                                자세히 보기
+                            </button>
+                        </div>
+                    </section>
                 </Link>
             ))}
         </div>

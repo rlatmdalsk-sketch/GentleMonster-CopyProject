@@ -100,7 +100,7 @@ const ProductListPage = () => {
                             {error}
                         </p>
                         <p className="text-[10px] text-gray-400">
-                            콘솔에서 에러 로그를 확인해주세요
+                            에러가 발생하였습니다
                         </p>
                     </div>
                 ) : products.length > 0 ? (

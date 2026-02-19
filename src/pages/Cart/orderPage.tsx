@@ -128,15 +128,8 @@ function OrderPage() {
             )}
 
             <div className={twMerge("flex", "justify-end", "mt-30")}>
-                <main className={twMerge("flex", "w-[1300px]", "justify-between")}>
-                    <div
-                        className={twMerge(
-                            "w-[650px]",
-                            "flex",
-                            "flex-col",
-                            "gap-3",
-                            "text-[12px]",
-                        )}>
+                <main className="flex flex-col lg:flex-row w-full max-w-[1500px] justify-between items-start gap-10 mx-auto px-4 md:px-0">
+                    <div className="w-full lg:ml-20 lg:w-[650px] flex flex-col gap-3 text-[12px]">
                         <div className={twMerge("flex")}>
                             <p className="font-[450]">1 이메일주소</p>
                         </div>
@@ -216,7 +209,7 @@ function OrderPage() {
                         </form>
                     </div>
 
-                    <div className={twMerge("w-[420px]", "self-start", "mr-15")}>
+                    <div className="w-full lg:w-[420px] self-start lg:mr-20 mt-10 lg:mt-10">
                         <div className="p-8">
                             <div className="flex justify-between items-center mb-6">
                                 <h3 className="text-[13px]">주문 요약</h3>

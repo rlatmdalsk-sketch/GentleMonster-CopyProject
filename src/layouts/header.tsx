@@ -113,8 +113,8 @@ export default function Header({ onLoginClick }: { onLoginClick: () => void }) {
                                   ? "bg-[#f2f3f5]/60 backdrop-blur-xl text-black"
                                   : "bg-transparent text-white",
                         )}>
-                        <div className="grid grid-cols-3 items-center h-[90px] px-[60px] ">
-                            <nav className="flex gap-6 h-full items-center">
+                        <div className="grid grid-cols-3 items-center h-[60px] md:h-[90px] px-4 md:px-[60px]">
+                            <nav className="flex gap-3 md:gap-6 h-full items-center overflow-x-hidden">
                                 {displayMenu.map(menu => {
                                     const parentPath = menu.path.replace(/^\//, "");
                                     const firstChildPath =
@@ -134,7 +134,7 @@ export default function Header({ onLoginClick }: { onLoginClick: () => void }) {
                                             className="relative h-full flex items-center cursor-pointer ">
                                             <Link
                                                 to={topMenuLink}
-                                                className="text-[13px] font-[450] ">
+                                                className="md:text-[13px] font-[450] text-[11px] ">
                                                 {menu.name}
                                             </Link>
                                         </div>
@@ -147,26 +147,26 @@ export default function Header({ onLoginClick }: { onLoginClick: () => void }) {
                                     to="/"
                                     onClick={handleLogoClick}
                                     className={twMerge(
-                                        "w-[280px] md:w-[305px] transition-all duration-300 hover:opacity-70",
+                                        "w-[150px] md:w-[280px] lg:w-[305px] transition-all duration-300 hover:opacity-70",
                                         logoColorClass,
                                     )}>
                                     <Logo className="w-full h-auto" />
                                 </Link>
                             </div>
 
-                            <div className="flex gap-3 justify-end items-center">
+                            <div className="flex gap-1.5 md:gap-3 justify-end items-center">
                                 <div className="flex items-center">
                                     <button
                                         onClick={() => setIsSearchOpen(true)}
                                         className="p-1 hover:opacity-50 transition-opacity cursor-pointer">
-                                        <IoIosSearch size={25} />
+                                        <IoIosSearch className="text-[20px] md:text-[25px]" />
                                     </button>
                                 </div>
                                 {isLoggedIn ? (
                                     <Link
                                         to="/myaccount"
                                         className="p-1 hover:opacity-50 transition-opacity">
-                                        <LuUser size={24} />
+                                        <LuUser className="text-[18px] md:text-[24px]" />
                                     </Link>
                                 ) : (
                                     <button
@@ -175,7 +175,7 @@ export default function Header({ onLoginClick }: { onLoginClick: () => void }) {
                                             onLoginClick();
                                         }}
                                         className="p-1 hover:opacity-50 transition-opacity cursor-pointer">
-                                        <LuUser size={25} />
+                                        <LuUser className="text-[20px] md:text-[25px]" />
                                     </button>
                                 )}
 
@@ -183,13 +183,13 @@ export default function Header({ onLoginClick }: { onLoginClick: () => void }) {
                                     to="/shoppingBag"
                                     onClick={handleCartClick}
                                     className="p-1 hover:opacity-50 transition-opacity relative flex items-center justify-center">
-                                    <LiaShoppingBagSolid size={25} />
+                                    <LiaShoppingBagSolid className="text-[20px] md:text-[25px]" />
 
                                     {totalCount > 0 && (
                                         <span
                                             className={twMerge(
-                                                "absolute pt-1.5", // 가방 손잡이 아래로 살짝 내리기 위한 패딩
-                                                "text-[10px] font-[450] leading-none",
+                                                "absolute pt-1 md:pt-1.5",
+                                                "text-[8px] md:text-[10px] font-[450] leading-none",
                                                 !isHome || isScrolled ? "text-black" : "text-white",
                                             )}>
                                             {totalCount}
@@ -244,7 +244,7 @@ export default function Header({ onLoginClick }: { onLoginClick: () => void }) {
                         </div>
                     </div>
 
-                    {!isHome && <div className="h-[90px] mobile:h-[56px] w-full" />}
+                    {!isHome && <div className="h-[60px] md:h-[90px] w-full" />}
                 </div>
             </div>
         </>

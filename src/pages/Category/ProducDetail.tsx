@@ -110,24 +110,23 @@ const ProductDetailPage = () => {
     return (
         <>
             <div className="flex flex-col md:flex-row w-full min-h-screen">
-                {/* 좌측: 이미지 상세탭 */}
                 <div className="w-full md:w-[70%] lg:w-[75%] flex flex-col">
                     {product.images?.map((img, index) => (
                         <div
                             key={index}
-                            className="w-full h-[60vh] md:h-screen overflow-hidden flex justify-center items-center">
+                            className="w-full h-auto md:h-screen overflow-hidden flex justify-center items-center">
                             <img
                                 src={img.url}
                                 alt={`${product.name}-${index}`}
-                                className="w-full h-full object-contain scale-[1.5] translate-x-[15%] translate-y-[-10%] "
+                                className="w-full h-full object-contain scale-[1.1] md:scale-[1.5] md:translate-x-[15%] md:translate-y-[-10%]"
                             />
                         </div>
                     ))}
                 </div>
 
                 {/* 우측: 상품 정보탭 */}
-                <div className="w-full md:w-[30%] lg:w-[25%] px-8 md:px-12 py-20 md:sticky md:top-0 md:h-screen flex flex-col justify-start md:justify-center overflow-y-auto">
-                    <div className="max-w-[340px] w-full ml-auto">
+                <div className="w-full md:w-[30%] lg:w-[25%] px-6 md:px-12 py-10 md:py-20 md:sticky md:top-0 md:h-screen flex flex-col justify-start md:justify-center overflow-y-auto">
+                    <div className="max-w-[340px] w-full mx-auto md:ml-auto">
                         <div className="flex justify-between items-start mb-1">
                             <h1 className="text-[16px] font-medium tracking-tight text-[#111]">
                                 {product.name}
@@ -139,11 +138,10 @@ const ProductDetailPage = () => {
                                 allProducts={[product]}
                             />
                         </div>
-
+                        {/* 이하 아코디언 및 버튼 디자인은 승민님 코드 100% 동일하게 유지 */}
                         <p className="text-[13px] font-normal text-[#111] mb-6">
                             ₩{product.price?.toLocaleString("ko-KR")}
                         </p>
-
                         <button
                             className="w-full bg-black text-white py-4 text-[12px] font-bold rounded-[11px] mb-5 tracking-tight hover:bg-[#333] transition-colors cursor-pointer"
                             onClick={handleAddToCart}>
@@ -242,53 +240,43 @@ const ProductDetailPage = () => {
                     </div>
                 </div>
             </div>
-            <div className="w-full ">
-                {/* 헤더: BestSeller와 동일한 패딩 및 폰트 설정 */}
-                <div className={twMerge("pt-[55px]", "px-[50px]", "w-full")}>
-                    <p className={twMerge("text-[#111]", "text-[17px]", "font-[550]")}>
+
+            {/* 하단: 유사한 프레임 (Swiper 반응형 설정 중요) */}
+            <div className="w-full pb-20">
+                <div className="pt-[55px] px-6 md:px-[50px] w-full">
+                    <p className="text-[#111] text-[17px] font-[550]">
                         유사한 프레임
                     </p>
                 </div>
 
-                <div className="w-full">
+                <div className="w-full mt-6">
                     {relatedProducts.length > 0 ? (
                         <Swiper
                             modules={[FreeMode]}
-                            slidesPerView={4.5}
-                            spaceBetween={25}
-                            grabCursor={true}
-                            freeMode={{
-                                enabled: true,
-                                sticky: true,
-                                momentum: false,
-                            }}
-                            speed={800}
+                            slidesPerView={1.5}
+                            spaceBetween={15}
+                            freeMode={true}
                             breakpoints={{
-                                768: { slidesPerView: 4.5 },
-                                1024: { slidesPerView: 4.5 },
-                                1440: { slidesPerView: 4.5 },
+                                640: { slidesPerView: 2.5, spaceBetween: 20 },
+                                1024: { slidesPerView: 4.5, spaceBetween: 25 },
                             }}
-                            className="w-full h-[663px]">
+                            className="w-full !px-6 md:!px-[50px]">
                             {relatedProducts.map(item => (
                                 <SwiperSlide key={item.id}>
-                                    <Link
-                                        to={`/product/${item.id}`}
-                                        className="block w-full h-full">
-                                        {/* justify-between을 제거하여 요소들이 위에서부터 차례대로 쌓이게 합니다 */}
-                                        <div className="w-full h-full flex flex-col ml-10">
-                                            {/* 이미지 영역: 높이를 고정하거나 비율을 조정하여 텍스트가 올라올 공간을 줍니다 */}
-                                            <div className="w-full h-[500px] overflow-hidden relative">
+                                    <Link to={`/product/${item.id}`} className="block group">
+                                        <div className="w-full flex flex-col">
+                                            <div className="w-full aspect-[3/4] overflow-hidden relative bg-[#f9f9f9]">
                                                 <img
                                                     src={item.images?.[0]?.url}
                                                     alt={item.name}
                                                     className="w-full h-[150%] object-cover"
-                                                    style={{ transform: "translateY(-160px)" }}
+                                                    style={{ transform: "translateY(-20%)" }}
                                                 />
                                             </div>
 
-                                            <div className="mt-4 text-[11px] leading-relaxed w-full px-[50px] text-left text-black">
-                                                <p className="font-bold">{item.name}</p>
-                                                <p>₩{item.price?.toLocaleString("ko-KR")}</p>
+                                            <div className="mt-4 text-[11px] leading-relaxed">
+                                                <p className="font-bold text-black">{item.name}</p>
+                                                <p className="text-gray-600">₩{item.price?.toLocaleString("ko-KR")}</p>
                                             </div>
                                         </div>
                                     </Link>
@@ -296,7 +284,7 @@ const ProductDetailPage = () => {
                             ))}
                         </Swiper>
                     ) : (
-                        <div className="text-center py-20 text-[10px] text-gray-400 uppercase tracking-widest">
+                        <div className="text-center py-20 text-[10px] text-gray-400">
                             유사한 상품이 없습니다.
                         </div>
                     )}
