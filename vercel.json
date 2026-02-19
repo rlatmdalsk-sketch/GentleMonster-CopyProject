@@ -3,6 +3,10 @@
         {
             "source": "/proxy/:path*",
             "destination": "http://49.247.30.225:4101/api/:path*"
+        },
+        {
+            "source": "/(.*)",
+            "destination": "/index.html"
         }
     ]
 }
